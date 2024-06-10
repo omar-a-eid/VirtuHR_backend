@@ -9,6 +9,7 @@ class App {
   constructor() {
     this.app = express();
     this.config();
+    this.routes();
   }
 
   private config(): void {
@@ -17,6 +18,10 @@ class App {
     this.app.use(bodyParser.urlencoded({ extended: false }));
     this.app.use(cors());
     //#endregion
+  }
+
+  private routes(): void {
+    //write all the routes here
   }
 }
 

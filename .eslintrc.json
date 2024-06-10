@@ -16,7 +16,8 @@
   "plugins": ["@typescript-eslint", "prettier"],
   "rules": {
     "prettier/prettier": ["error", {
-      "semi": true
+      "semi": true,
+      "endOfLine": "auto"
     }],
     "@typescript-eslint/explicit-module-boundary-types": "off",
     "@typescript-eslint/no-explicit-any": "off"

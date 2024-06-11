@@ -87,15 +87,38 @@ Employee.init(
     firstName: {
       type: DataTypes.STRING(100),
       allowNull: false,
+      validate: {
+        notEmpty: {
+          msg: 'First name is required',
+        },
+        len: {
+          args: [4, 30],
+          msg: 'First name must be between 4 and 30 characters',
+        },
+      },
     },
     lastName: {
       type: DataTypes.STRING(100),
       allowNull: false,
+      validate: {
+        notEmpty: {
+          msg: 'Last name is required',
+        },
+        len: {
+          args: [4, 30],
+          msg: 'Last name must be between 4 and 30 characters',
+        },
+      },
     },
     email: {
       type: DataTypes.STRING(255),
       allowNull: false,
       unique: true,
+      validate: {
+        isEmail: {
+          msg: 'Must be a valid email address',
+        },
+      },
     },
     image: {
       type: DataTypes.STRING(255),
@@ -105,6 +128,11 @@ Employee.init(
     },
     phone: {
       type: DataTypes.STRING(50),
+      validate: {
+        isEmail: {
+          msg: 'Must be a valid email address',
+        },
+      },
     },
     position: {
       type: DataTypes.STRING(100),
@@ -123,6 +151,7 @@ Employee.init(
       allowNull: false,
       validate: {
         min: 0,
+        msg: 'Salary must be greater than or equal to zero',
       },
     },
     createdAt: DataTypes.DATE,
@@ -132,7 +161,10 @@ Employee.init(
       type: DataTypes.ENUM('M', 'F'),
       allowNull: false,
       validate: {
-        isIn: [['M', 'F']],
+        isIn: {
+          args: [['M', 'F']],
+          msg: 'Gender must be either M or F',
+        },
       },
     },
     hireDate: {
@@ -158,11 +190,14 @@ Employee.init(
       onDelete: 'SET NULL',
     },
     employmentType: {
-      type: DataTypes.STRING(20),
+      type: DataTypes.ENUM('full time', 'part time', 'freelance', 'internship'),
       allowNull: false,
       defaultValue: 'full time',
       validate: {
-        isIn: [['full time', 'part time', 'freelance', 'internship']],
+        isIn: {
+          args: [['full time', 'part time', 'freelance', 'internship']],
+          msg: 'Employment type must be one of full time, part time, freelance, or internship',
+        },
       },
     },
   },

@@ -5,8 +5,8 @@ const router = express.Router();
 import {
   getAllEmployees,
   getEmployeesById,
-  AddEmployee,
-  EditEmployee,
+  AddNewEmployee,
+  editEmployee,
   DeleteEmployee,
   getEmployeesByPosition,
 } from '../controllers/employeeControllers';
@@ -16,8 +16,8 @@ router.get('/employees/filterByPosition', getEmployeesByPosition);
 
 router.get('/employees', getAllEmployees);
 router.get('/employees/:id', getEmployeesById);
-router.post('/employees', AddEmployee);
-router.put('/employees/:id', EditEmployee);
+router.post('/employees', AddNewEmployee);
+router.put('/employees/:id', editEmployee);
 router.delete('/employees/:id', DeleteEmployee);
 
 export default router;

@@ -1,49 +1,91 @@
 import { Request, Response } from 'express';
 import EmployeeRepository from '../repositories/EmployeeRepository';
-
+import EmployeeService from '../services/employeeService';
+import employeeSchema from './validationSchema';
+import bcrypt from 'bcrypt';
+/*------------------------GetAllEmployee-----------------------*/
 export const getAllEmployees = async (req: Request, res: Response) => {
   try {
-    const employee = await EmployeeRepository.getAll();
-    // if there are employees get them if not message no employees are found
-    if (employee.length > 0) {
-      console.log(employee);
-      return res.json(employee);
+    const employees = await EmployeeService.getAllEmployees();
+    if (employees.length > 0) {
+      console.log(employees);
+      return res.json(employees);
     } else {
       return res.status(404).json({ message: 'No Employees found' });
     }
   } catch (error) {
+    console.error('Error fetching all employees:', error);
     return res.status(500).json({ error: 'Internal Server Error!!' });
   }
 };
-
+/*----------------------------GetEmployeeById-------------------------*/
 export const getEmployeesById = async (req: Request, res: Response) => {
+  const EmployeeId = parseInt(req.params.id);
+  if (isNaN(EmployeeId)) {
+    return res.status(400).json({ error: `ID entered is Not a Number` });
+  }
+  const employee = await EmployeeService.getEmployeesById(EmployeeId);
+  if (employee) {
+    return res.json(employee);
+  } else {
+    return res
+      .status(404)
+      .json({ message: `Employee ${EmployeeId} is not Found` });
+  }
+};
+/*----------------------------UpdateEmployee-------------------------*/
+export const editEmployee = async (req: Request, res: Response) => {
+  const employeeId = parseInt(req.params.id, 10); // Changed variable name to camelCase
+  if (isNaN(employeeId)) {
+    return res.status(400).json({ error: 'ID entered is not a number' }); // Minor text change for consistency
+  }
+
+  const { error } = employeeSchema.validate(req.body);
+  if (error) {
+    return res.status(400).json({ error: error.details[0].message });
+  }
+  const saltRounds = 10;
+  const hashedPassword = await bcrypt.hash(req.body.passowrd, saltRounds);
+  const newEmployee = {
+    ...req.body,
+    passowrd: hashedPassword,
+  };
+
   try {
-    const employeeId = parseInt(req.params.id);
-    if (isNaN(employeeId)) {
-      return res.status(400).json({ error: `ID entered is Not a Number` });
+    await EmployeeService.UpdateEmployee(employeeId, newEmployee);
+    return res.status(200).json({ message: 'Employee updated successfully' });
+  } catch (err) {
+    return res
+      .status(500)
+      .json({ error: 'An error occurred while updating the employee' });
+  }
+};
+// ------------------AddEmployees------------------------
+export const AddNewEmployee = async (req: Request, res: Response) => {
+  try {
+    const { error } = employeeSchema.validate(req.body);
+    if (error) {
+      return res.status(400).json({ error: error.details[0].message });
     }
-    const employee = await EmployeeRepository.getById(employeeId);
+    const saltRounds = 10;
+    const hashedPassword = await bcrypt.hash(req.body.passowrd, saltRounds);
+    const newEmployee = {
+      ...req.body,
+      passowrd: hashedPassword,
+    };
+
+    const employee = await EmployeeService.AddEmployee(newEmployee);
+
     if (employee) {
-      return res.json(employee);
+      return res.status(201).json(employee); // 201 Created
     } else {
-      return res
-        .status(404)
-        .json({ message: `Employee ${employeeId} is not Found` });
+      return res.status(500).json({ message: 'Failed to create employee' });
     }
   } catch (error) {
-    console.error('Error fetching employee by ID:', error);
-    return res.status(500).json({ error: 'Internal Server Error!!' });
+    console.error('Error adding new employee:', error);
+    return res.status(500).json({ error: 'Internal Server Error' });
   }
 };
-
-export const AddEmployee = async (req: Request, res: Response) => {
-  console.log(`Logic Here ${res} & ${req}`);
-};
-
-export const EditEmployee = async (req: Request, res: Response) => {
-  console.log(`Logic Here ${res} & ${req}`);
-};
-
 export const DeleteEmployee = async (req: Request, res: Response) => {
   try {
     const employeeId = parseInt(req.params.id);

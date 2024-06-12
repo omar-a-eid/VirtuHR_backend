@@ -18,8 +18,12 @@ class EmployeeRepository implements IEmployeeRepository {
   //     await Employee.update(employee, { where: { id } });
   //   }
 
-  async delete(id: number): Promise<number> {
-    return await Employee.destroy({ where: { id }, force: true });
+  async delete(id: number, softDelete: boolean = true): Promise<number> {
+    if (softDelete) {
+      return await Employee.destroy({ where: { id } }); // Soft delete
+    } else {
+      return await Employee.destroy({ where: { id }, force: true }); // Hard delete
+    }
   }
 }
 

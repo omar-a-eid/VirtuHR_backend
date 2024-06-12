@@ -50,15 +50,23 @@ export const DeleteEmployee = async (req: Request, res: Response) => {
     if (isNaN(employeeId)) {
       return res.status(400).json({ error: `ID entered is Not a Number` });
     }
-    const deletedEmp = await EmployeeRepository.delete(employeeId);
-    if (deletedEmp === 0) {
+    const softDelete = req.query.hard !== 'true';
+    const deletedCount = await EmployeeRepository.delete(
+      employeeId,
+      softDelete,
+    );
+    if (deletedCount === 0) {
       return res
         .status(404)
         .json({ message: `Employee with ID ${employeeId} not found` });
     }
-    return res
-      .status(200)
-      .json({ message: `Employee with ID ${employeeId} deleted successfully` });
+    //the default behaviour of the delete function is the soft delete
+    //but if you want to make hard delete send query string hard=true
+    //we will handle this in front end isa
+    const deleteType = softDelete ? 'soft' : 'hard';
+    return res.status(200).json({
+      message: `Employee with ID ${employeeId} ${deleteType} deleted successfully`,
+    });
   } catch (error) {
     return res.status(500).json({ error: 'Internal Server Error!!' });
   }

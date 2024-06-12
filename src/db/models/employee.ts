@@ -205,7 +205,7 @@ Employee.init(
     sequelize,
     modelName: 'Employee',
     timestamps: true,
-    paranoid: false, // disables soft deletes and make it hard delete
+    paranoid: true, // disables soft deletes and make it hard delete
     underscored: true,
   },
 );

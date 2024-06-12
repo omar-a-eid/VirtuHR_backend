@@ -6,4 +6,7 @@ export interface IEmployeeRepository {
   // add(employee: Employee): Promise<Employee>;
   // update(id: number, employee: Partial<Employee>): Promise<void>;
   delete(id: number, softDelete?: boolean): Promise<number>;
+
+  // to get -> Employee by Position with query parameter position=(Manager)
+  getByPosition(position: string): Promise<Employee[]>;
 }

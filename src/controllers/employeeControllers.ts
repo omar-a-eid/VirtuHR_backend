@@ -71,3 +71,24 @@ export const DeleteEmployee = async (req: Request, res: Response) => {
     return res.status(500).json({ error: 'Internal Server Error!!' });
   }
 };
+
+// to get -> Employee by Position with query parameter position=(Manager)
+export const getEmployeesByPosition = async (req: Request, res: Response) => {
+  try {
+    const position = req.query.position as string;
+    if (!position) {
+      return res.status(400).json({ error: 'Position parameter is required' });
+    }
+    const employees = await EmployeeRepository.getByPosition(position);
+    if (employees.length > 0) {
+      return res.status(200).json(employees);
+    } else {
+      return res
+        .status(404)
+        .json({ message: `No employees found with position: ${position}` });
+    }
+  } catch (error) {
+    console.error('Error fetching employees by position:', error);
+    return res.status(500).json({ error: 'Internal Server Error!!' });
+  }
+};

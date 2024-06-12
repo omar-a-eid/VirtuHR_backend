@@ -25,6 +25,11 @@ class EmployeeRepository implements IEmployeeRepository {
       return await Employee.destroy({ where: { id }, force: true }); // Hard delete
     }
   }
+
+  // to get -> Employee by Position with query parameter position=(Manager)
+  async getByPosition(position: string): Promise<Employee[]> {
+    return Employee.findAll({ where: { position } });
+  }
 }
 
 export default new EmployeeRepository();

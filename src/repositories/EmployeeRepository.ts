@@ -18,9 +18,8 @@ class EmployeeRepository implements IEmployeeRepository {
   //     await Employee.update(employee, { where: { id } });
   //   }
 
-  async delete(id: number): Promise<{ success: boolean; message?: string }> {
-    const deletedCount = await Employee.destroy({ where: { id } });
-    return { success: deletedCount > 0 };
+  async delete(id: number): Promise<number> {
+    return await Employee.destroy({ where: { id }, force: true });
   }
 }
 

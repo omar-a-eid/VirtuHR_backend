@@ -5,5 +5,5 @@ export interface IEmployeeRepository {
   getById(id: number): Promise<Employee | null>;
   // add(employee: Employee): Promise<Employee>;
   // update(id: number, employee: Partial<Employee>): Promise<void>;
-  delete(id: number): Promise<{ success: boolean; message?: string }>;
+  delete(id: number): Promise<number>;
 }

@@ -1,5 +1,8 @@
 import Employee from '../db/models/employee';
-import { IEmployeeRepository } from '../interface/IEmployeeRepostory';
+import {
+  Employees,
+  IEmployeeRepository,
+} from '../interface/IEmployeeRepostory';
 
 class EmployeeRepository implements IEmployeeRepository {
   async getAll(): Promise<Employee[]> {
@@ -26,8 +29,30 @@ class EmployeeRepository implements IEmployeeRepository {
   }
 
   // to get -> Employee by Position with query parameter position=(Manager)
-  async getByPosition(position: string): Promise<Employee[]> {
-    return Employee.findAll({ where: { position } });
+  async getByPosition(
+    position: string | null,
+    name: string | null,
+  ): Promise<Employees> {
+    const query: any = { where: {} };
+    if (name !== '') {
+      const firstName = name?.split(' ')[0] ?? '';
+      const lastName = name?.split(' ')[1] ?? '';
+      query.where.firstName = firstName;
+      if (lastName !== '') {
+        query.where.lastName = lastName;
+      }
+    }
+    if (position !== '') {
+      query.where.position = position;
+    }
+    const employees: Employees = {
+      employees: [],
+      count: 0,
+    };
+    const { count, rows } = await Employee.findAndCountAll(query);
+    employees.employees = rows;
+    employees.count = count;
+    return employees;
   }
 }
 

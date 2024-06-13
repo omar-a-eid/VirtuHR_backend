@@ -7,3 +7,8 @@ export interface IEmployeeRepository {
   update(id: number, employee: Partial<Employee>): Promise<void>;
   delete(id: number, softDelete?: boolean): Promise<number>;
 }
+
+export interface Employees {
+  employees: Employee[];
+  count: number;
+}

@@ -29,7 +29,7 @@ const jobPostingSchema = Joi.object({
   compensation: Joi.number().integer().messages({
     'number.base': 'Compensation must be a number',
   }),
-  description: Joi.string().messages({
+  description: Joi.object().messages({
     'string.base': 'Description must be a string',
   }),
   location: Joi.string().messages({

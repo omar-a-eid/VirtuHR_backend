@@ -24,7 +24,7 @@ export default {
       image: {
         type: DataTypes.STRING(255),
       },
-      passowrd: {
+      password: {
         type: DataTypes.STRING,
       },
       phone: {

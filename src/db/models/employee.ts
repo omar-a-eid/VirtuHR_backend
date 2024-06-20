@@ -326,7 +326,7 @@ Employee.init(
     image: {
       type: DataTypes.STRING(255),
     },
-    passowrd: {
+    password: {
       type: DataTypes.STRING,
     },
     phone: {
@@ -411,7 +411,7 @@ Employee.init(
     sequelize,
     modelName: 'Employee',
     timestamps: true,
-    paranoid: true, // disables soft deletes and make it hard delete
+    paranoid: true,
     underscored: true,
   },
 );

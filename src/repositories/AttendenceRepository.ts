@@ -48,8 +48,10 @@ class AttendenceRepository implements IAttendenceRepository {
     const checkInTime = attendance.createdAt;
     const checkOutTime = new Date();
 
-    const hoursWorked =
+    let hoursWorked =
       (checkOutTime.getTime() - checkInTime.getTime()) / 3600000;
+    hoursWorked = Math.ceil(hoursWorked);
+
     attendance.checkedOut = true;
     attendance.updatedAt = checkOutTime;
     attendance.hours = hoursWorked;

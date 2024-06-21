@@ -2,7 +2,7 @@ import Employee from '../db/models/employee';
 import {
   Employees,
   IEmployeeRepository,
-} from '../interface/IEmployeeRepostory';
+} from '../interface/IEmployeeRepository';
 
 class EmployeeRepository implements IEmployeeRepository {
   async getAll(): Promise<Employee[]> {

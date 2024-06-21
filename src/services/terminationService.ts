@@ -1,10 +1,16 @@
-import terminationRepository from '../repositories/TerminationRepository';
+import Termination from '../db/models/termination';
+import TerminationRepository from '../repositories/TerminationRepository';
+import BaseService from './baseService';
 
-class TerminationService {
+export default class TerminationService extends BaseService<Termination> {
+  private terminationRepository: TerminationRepository;
+
+  constructor(terminationRepository: TerminationRepository) {
+    super(Termination);
+    this.terminationRepository = terminationRepository;
+  }
+
   async getAllTerminatedEmployees() {
-    const terminations = await terminationRepository.getAllTerminations();
-    return terminations;
+    return await this.terminationRepository.getAllTerminations();
   }
 }
-
-export default new TerminationService();

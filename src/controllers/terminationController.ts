@@ -1,8 +1,12 @@
 import { Request, Response } from 'express';
-import terminationService from '../services/terminationService';
+import TerminationRepository from '../repositories/TerminationRepository';
+import TerminationService from '../services/terminationService';
 
-class TerminationController {
-  async getAllTerminatedEmployees(req: Request, res: Response) {
+const terminationRepository = new TerminationRepository();
+const terminationService = new TerminationService(terminationRepository);
+
+export default class TerminationController {
+  public static async getAllTerminatedEmployees(req: Request, res: Response) {
     try {
       const employees = await terminationService.getAllTerminatedEmployees();
       res.status(200).json(employees);
@@ -15,5 +19,3 @@ class TerminationController {
     }
   }
 }
-
-export default new TerminationController();

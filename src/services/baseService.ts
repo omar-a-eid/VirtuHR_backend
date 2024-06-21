@@ -1,7 +1,7 @@
 import { Model, ModelStatic } from 'sequelize';
-import { BaseRepository } from '../repositories/BaseRepository';
+import BaseRepository from '../repositories/BaseRepository';
 
-export class BaseService<T extends Model> {
+export default class BaseService<T extends Model> {
   private repository: BaseRepository<T>;
 
   constructor(model: ModelStatic<T>) {

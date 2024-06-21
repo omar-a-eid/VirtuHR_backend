@@ -1,7 +1,7 @@
 import { Model, ModelStatic, WhereOptions } from 'sequelize';
-import { IRepository } from '../interface/IRepository';
+import IRepository from '../interface/IRepository';
 
-export class BaseRepository<T extends Model> implements IRepository<T> {
+export default class BaseRepository<T extends Model> implements IRepository<T> {
   private model: ModelStatic<T>;
 
   constructor(model: ModelStatic<T>) {

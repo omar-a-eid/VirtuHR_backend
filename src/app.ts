@@ -2,6 +2,7 @@ import bodyParser from 'body-parser';
 import cors from 'cors';
 import 'dotenv/config';
 import express, { Application } from 'express';
+import './db/models/index';
 import departmentRouters from './routes/departmentRouters';
 import employeeRouters from './routes/employeeRouters';
 import terminationRouters from './routes/terminationRouters';

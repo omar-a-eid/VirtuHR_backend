@@ -1,6 +1,6 @@
 import { Model } from 'sequelize';
 
-export interface IRepository<T extends Model> {
+export default interface IRepository<T extends Model> {
   getAll(): Promise<T[]>;
   getById(id: number): Promise<T | null>;
   create(data: any): Promise<T>;

@@ -1,12 +1,12 @@
 import { Request, Response } from 'express';
-import { DepartmentRepository } from '../repositories/DepartmentRepository';
-import { DepartmentService } from '../services/departmentService';
+import DepartmentRepository from '../repositories/DepartmentRepository';
+import DepartmentService from '../services/departmentService';
 
 // Initialize the repository and service
 const departmentRepository = new DepartmentRepository();
 const departmentService = new DepartmentService(departmentRepository);
 
-export class DepartmentController {
+export default class DepartmentController {
   public static async getAll(req: Request, res: Response): Promise<void> {
     try {
       const departments = await departmentService.getAll();

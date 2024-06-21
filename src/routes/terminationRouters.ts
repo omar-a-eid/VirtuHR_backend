@@ -1,11 +1,11 @@
 import { Router } from 'express';
-import terminationController from '../controllers/terminationController';
+import TerminationController from '../controllers/terminationController';
 
 const router = Router();
 
 router.get(
   '/terminated-employees',
-  terminationController.getAllTerminatedEmployees,
+  TerminationController.getAllTerminatedEmployees,
 );
 
 export default router;

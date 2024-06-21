@@ -9,7 +9,7 @@ class JobPostingRepository implements IJobPostingRepository {
     return JobPosting.findByPk(id);
   }
   async add(jobPostingData: Partial<JobPosting>): Promise<JobPosting> {
-    return JobPosting.create(jobPostingData);
+    return await JobPosting.create(jobPostingData);
   }
 
   async update(id: number, jobPosting: Partial<JobPosting>): Promise<void> {

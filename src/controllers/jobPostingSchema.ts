@@ -13,7 +13,7 @@ const jobPostingSchema = Joi.object({
       'any.only': 'Job status must be one of "archived" or "active"',
       'any.required': 'Job status is required',
     }),
-  hiringLead: Joi.allow(null).messages({
+  hiringLeadId: Joi.allow(null).messages({
     'string.base': 'Hiring lead must be a string',
   }),
   department: Joi.allow(null).messages({

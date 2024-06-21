@@ -4,6 +4,8 @@ import 'dotenv/config';
 import express, { Application } from 'express';
 import jobPostingRouters from './routes/jobPostingRouters';
 import applicantRouters from './routes/applicantRouters';
+import employeeRouters from './routes/employeeRouters';
+
 class App {
   public app: Application;
 
@@ -25,6 +27,7 @@ class App {
     //write all the routes here
     this.app.use('/api', jobPostingRouters);
     this.app.use('/api', applicantRouters);
+    this.app.use('/api', employeeRouters);
   }
 }
 

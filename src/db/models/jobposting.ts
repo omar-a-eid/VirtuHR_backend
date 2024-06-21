@@ -5,7 +5,7 @@ class JobPosting extends Model {
   declare id: number;
   declare title: string;
   declare jobStatus: 'archived' | 'active';
-  declare hiringLead: string;
+  declare hiringLeadId: string;
   declare department: string;
   declare employmentType:
     | 'full time'

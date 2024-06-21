@@ -51,22 +51,25 @@ export const createJobPosting = async (req: Request, res: Response) => {
       return res.status(400).json({ errors: error.details });
     }
 
-    // console.log('Validated data:', value); // Log the validated data
- 
-    const newJobPosting = await JobPostingService.addJobPosting(value);
+    // Extract hiringLeadId from validated data
+    const { hiringLeadId, ...validatedData } = value;
+
+    const newJobPosting = await JobPostingService.addJobPosting({
+      ...validatedData,
+      hiringLeadId, // Ensure hiringLeadId is included
+    });
 
     if (newJobPosting) {
-      // console.log('New job posting created:', newJobPosting);
       return res.status(201).json(newJobPosting);
     } else {
-      // console.error('Failed to create new job posting');
       return res.status(500).json({ error: 'Failed to create new jobPosting' });
     }
   } catch (error) {
-    // console.error('Error creating job posting:', error);
+    console.error('Error creating job posting:', error);
     return res.status(500).json({ error: 'Internal Server Error' });
   }
 };
+
 
 // Update an existing job posting
 export const updateJobPosting = async (req: Request, res: Response) => {

@@ -40,7 +40,7 @@
 //   // Use the allias to access the data
 //   static associate(models: any) {
 //     this.belongsTo(models.Department, {
-//       foreignKey: 'department_id',
+//       foreignKey: 'departmentId',
 //       as: 'department',
 //       onDelete: 'SET NULL',
 //     });
@@ -244,17 +244,17 @@ class Employee extends Model {
 
   static associate(models: any) {
     this.belongsTo(models.Department, {
-      foreignKey: 'department_id',
+      foreignKey: 'departmentId',
       as: 'department',
       onDelete: 'SET NULL',
     });
     this.belongsTo(models.Employee, {
-      foreignKey: 'manager_id',
+      foreignKey: 'managerId',
       as: 'manager',
       onDelete: 'SET NULL',
     });
     this.belongsTo(models.DaysOff, {
-      foreignKey: 'days_off_id',
+      foreignKey: 'daysOffId',
       as: 'daysOff',
       onDelete: 'SET NULL',
     });
@@ -264,8 +264,14 @@ class Employee extends Model {
     this.belongsToMany(models.Cycle, { through: 'employees_cycles' });
     this.belongsToMany(models.Goal, { through: 'employees_goals' });
 
-    this.hasOne(models.Department);
-    this.hasOne(models.Termination);
+    this.hasOne(models.Department, {
+      foreignKey: 'managerId',
+      as: 'managedDepartment',
+    });
+    this.hasOne(models.Termination, {
+      foreignKey: 'employeeId',
+      onDelete: 'CASCADE',
+    });
 
     this.hasMany(models.Employee);
     this.hasMany(models.Announcement);

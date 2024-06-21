@@ -1,10 +1,8 @@
-import Termination from '../db/models/termination';
-import Employee from '../db/models/employee';
-
+import db from '../db/models';
 class TerminationRepository {
   async getAllTerminations() {
-    return Termination.findAll({
-      include: [Employee],
+    return db.Termination.findAll({
+      include: db.Employee,
     });
   }
 }

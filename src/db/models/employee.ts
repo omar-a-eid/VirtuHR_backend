@@ -245,7 +245,7 @@ class Employee extends Model {
   static associate(models: any) {
     this.belongsTo(models.Department, {
       foreignKey: 'departmentId',
-      as: 'department',
+      as: 'departmentEmployees',
       onDelete: 'SET NULL',
     });
     this.belongsTo(models.Employee, {
@@ -267,13 +267,18 @@ class Employee extends Model {
     this.hasOne(models.Department, {
       foreignKey: 'managerId',
       as: 'managedDepartment',
+      onDelete: 'SET NULL',
     });
     this.hasOne(models.Termination, {
       foreignKey: 'employeeId',
       onDelete: 'CASCADE',
     });
 
-    this.hasMany(models.Employee);
+    this.hasMany(models.Employee, {
+      foreignKey: 'managerId',
+      as: 'subordinate',
+      onDelete: 'SET NULL',
+    });
     this.hasMany(models.Announcement);
     this.hasMany(models.Assessment);
     this.hasMany(models.Attendance);

@@ -12,7 +12,7 @@ export default class DepartmentRepository extends BaseRepository<Department> {
     return Department.findByPk(id, {
       include: {
         model: Employee,
-        as: 'manager',
+        as: 'departmentEmployees',
       },
     });
   }

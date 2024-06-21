@@ -9,8 +9,6 @@ async function startServer() {
     await sequelize.authenticate();
     console.log('Database connected successfully');
 
-    // await sequelize.sync(); // Ensure models are in sync with the database
-
     app.listen(PORT, () => {
       console.log(`Server is running on port ${PORT}`);
     });

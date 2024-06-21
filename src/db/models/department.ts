@@ -12,22 +12,19 @@ class Department extends Model {
   static associate(models: any) {
     this.belongsTo(models.Employee, {
       foreignKey: 'managerId',
-      as: 'manager',
+      as: 'managedDepartment',
       onDelete: 'SET NULL',
     });
     this.belongsTo(models.Division, {
-      foreignKey: 'divisionId', // corrected foreign key
-      as: 'division',
+      foreignKey: 'divisionId',
       onDelete: 'SET NULL',
     });
     this.hasMany(models.Employee, {
       foreignKey: 'departmentId',
-      as: 'employees',
+      as: 'departmentEmployees',
+      onDelete: 'SET NULL',
     });
-    this.hasMany(models.JobPosting, {
-      foreignKey: 'departmentId',
-      as: 'jobPostings',
-    });
+    this.hasMany(models.JobPosting);
   }
 }
 

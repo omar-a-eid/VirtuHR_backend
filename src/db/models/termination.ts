@@ -10,7 +10,7 @@ class Termination extends Model {
 
   static associate(models: any) {
     this.belongsTo(models.Employee, {
-      foreignKey: 'employee_id',
+      foreignKey: 'employeeId',
       onDelete: 'CASCADE',
     });
   }

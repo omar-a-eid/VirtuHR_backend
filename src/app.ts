@@ -4,8 +4,10 @@ import 'dotenv/config';
 import express, { Application } from 'express';
 import jobPostingRouters from './routes/jobPostingRouters';
 import applicantRouters from './routes/applicantRouters';
+import './db/models/index';
+import departmentRouters from './routes/departmentRouters';
 import employeeRouters from './routes/employeeRouters';
-
+import terminationRouters from './routes/terminationRouters';
 class App {
   public app: Application;
 
@@ -28,6 +30,8 @@ class App {
     this.app.use('/api', jobPostingRouters);
     this.app.use('/api', applicantRouters);
     this.app.use('/api', employeeRouters);
+    this.app.use('/api', departmentRouters);
+    this.app.use('/api', terminationRouters);
   }
 }
 

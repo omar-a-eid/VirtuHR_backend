@@ -40,7 +40,7 @@
 //   // Use the allias to access the data
 //   static associate(models: any) {
 //     this.belongsTo(models.Department, {
-//       foreignKey: 'department_id',
+//       foreignKey: 'departmentId',
 //       as: 'department',
 //       onDelete: 'SET NULL',
 //     });
@@ -232,6 +232,7 @@ class Employee extends Model {
   declare location: string;
   declare daysOffId: number;
   declare amountOfRaise: number;
+  declare dateOfBirth: Date;
   declare employmentType:
     | 'full time'
     | 'part time'
@@ -244,17 +245,17 @@ class Employee extends Model {
 
   static associate(models: any) {
     this.belongsTo(models.Department, {
-      foreignKey: 'department_id',
-      as: 'department',
+      foreignKey: 'departmentId',
+      as: 'departmentEmployees',
       onDelete: 'SET NULL',
     });
     this.belongsTo(models.Employee, {
-      foreignKey: 'manager_id',
+      foreignKey: 'managerId',
       as: 'manager',
       onDelete: 'SET NULL',
     });
     this.belongsTo(models.DaysOff, {
-      foreignKey: 'days_off_id',
+      foreignKey: 'daysOffId',
       as: 'daysOff',
       onDelete: 'SET NULL',
     });
@@ -264,10 +265,21 @@ class Employee extends Model {
     this.belongsToMany(models.Cycle, { through: 'employees_cycles' });
     this.belongsToMany(models.Goal, { through: 'employees_goals' });
 
-    this.hasOne(models.Department);
-    this.hasOne(models.Termination);
+    this.hasOne(models.Department, {
+      foreignKey: 'managerId',
+      as: 'managedDepartment',
+      onDelete: 'SET NULL',
+    });
+    this.hasOne(models.Termination, {
+      foreignKey: 'employeeId',
+      onDelete: 'CASCADE',
+    });
 
-    this.hasMany(models.Employee);
+    this.hasMany(models.Employee, {
+      foreignKey: 'managerId',
+      as: 'subordinate',
+      onDelete: 'SET NULL',
+    });
     this.hasMany(models.Announcement);
     this.hasMany(models.Assessment);
     this.hasMany(models.Attendance);
@@ -326,7 +338,7 @@ Employee.init(
     image: {
       type: DataTypes.STRING(255),
     },
-    passowrd: {
+    password: {
       type: DataTypes.STRING,
     },
     phone: {
@@ -406,12 +418,15 @@ Employee.init(
         },
       },
     },
+    dateOfBirth: {
+      type: DataTypes.DATE,
+    },
   },
   {
     sequelize,
     modelName: 'Employee',
     timestamps: true,
-    paranoid: true, // disables soft deletes and make it hard delete
+    paranoid: true,
     underscored: true,
   },
 );

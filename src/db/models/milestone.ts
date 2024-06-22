@@ -1,7 +1,7 @@
 import { DataTypes, Model } from 'sequelize';
 import sequelize from '../../config/database';
 
-class Milesotne extends Model {
+class Milestone extends Model {
   declare id: number;
   declare title: string;
   declare goalId: number;
@@ -16,7 +16,7 @@ class Milesotne extends Model {
   }
 }
 
-Milesotne.init(
+Milestone.init(
   {
     id: {
       type: DataTypes.INTEGER,
@@ -41,10 +41,10 @@ Milesotne.init(
   },
   {
     sequelize,
-    modelName: 'Milesotne',
+    modelName: 'Milestone',
     timestamps: true,
     underscored: true,
   },
 );
 
-export default Milesotne;
+export default Milestone;

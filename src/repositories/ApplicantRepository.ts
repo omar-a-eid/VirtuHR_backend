@@ -1,9 +1,12 @@
 import Applicant from '../db/models/applicant';
 import { IApplicantRepository } from '../interface/IApplicantRepository';
 import { Transaction } from 'sequelize';
+import JobPosting from '../db/models/jobposting';
 class ApplicantRepository implements IApplicantRepository {
   async getAll(): Promise<Applicant[]> {
-    return Applicant.findAll();
+    return Applicant.findAll({
+      include: JobPosting,
+    });
   }
 
   async getById(id: number): Promise<Applicant | null> {

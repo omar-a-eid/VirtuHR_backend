@@ -111,7 +111,7 @@ class AttendenceRepository implements IAttendenceRepository {
       throw new Error('Employee not found');
     }
 
-    const salaryPerHour = employee.salary / (8 * 30);
+    const salaryPerHour = employee.salary / (8 * 26);
     const salary = totalHours * salaryPerHour;
 
     return { hours: totalHours, salary };

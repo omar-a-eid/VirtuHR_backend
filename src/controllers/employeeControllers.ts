@@ -1,5 +1,7 @@
 import { Request, Response } from 'express';
 import EmployeeRepository from '../repositories/EmployeeRepository';
+// import DepartmentRepository from '../repositories/DepartmentRepository';
+// import DaysOffRepository from '../repositories/DaysOffRepository';
 import EmployeeService from '../services/employeeService';
 import employeeSchema from './validationSchema';
 import bcrypt from 'bcrypt';
@@ -60,32 +62,86 @@ export const editEmployee = async (req: Request, res: Response) => {
       .json({ error: 'An error occurred while updating the employee' });
   }
 };
-// ------------------AddEmployees------------------------
+/*----------------------------AddNewEmployee-------------------------*/
+
 export const AddNewEmployee = async (req: Request, res: Response) => {
   try {
     const { error } = employeeSchema.validate(req.body);
     if (error) {
-      return res.status(400).json({ error: error.details[0].message });
+      return res.status(400).json({ error: error.message });
     }
-    const saltRounds = 10;
-    const hashedPassword = await bcrypt.hash(req.body.passowrd, saltRounds);
+
+    const { email, firstName, lastName } = req.body;
+
+    /* check if the Email exists */
+    const existingEmail = await EmployeeRepository.findByEmail(email);
+    if (existingEmail) {
+      console.log(existingEmail);
+      return res
+        .status(400)
+        .json({ error: `Email ${existingEmail} already exists` });
+    }
+
+    /* check if the FullName exists */
+    const existingFullName = await EmployeeRepository.findByFullName(
+      firstName,
+      lastName,
+    );
+    if (existingFullName) {
+      return res.status(400).json({
+        error: `Employee with this FullName ${existingFullName}  already exists`,
+      });
+    }
+
+    // /* check if the DepartmentId doesnot exists */
+    // const existingDepartmentId =
+    //   await DepartmentRepository.findById(departmentId);
+    // if (!existingDepartmentId) {
+    //   return res.status(400).json({
+    //     error: `Department ID ${existingDepartmentId} does not exist`,
+    //   });
+    // }
+
+    // /* check if the MangerId doesnot exists */
+    // const existingManagerId = await EmployeeRepository.getById(managerId);
+    // if (!existingManagerId) {
+    //   return res
+    //     .status(400)
+    //     .json({ error: `Manager ID ${existingManagerId} does not exist` });
+    // }
+
+    // /* check if the DaysOff doesnot exists */
+    // const existingDaysOffId = await DaysOffRepository.findById(daysOffId);
+    // if (!existingDaysOffId) {
+    //   return res
+    //     .status(400)
+    //     .json({ error: `Days Off ID ${existingDaysOffId} does not exist` });
+    // }
+
+    // Hash the password
+    // const saltRounds = 10;
+    // const hashedPassword = await bcrypt.hash(req.body.password, saltRounds);
+
+    // Create new employee object with hashed password
     const newEmployee = {
       ...req.body,
-      passowrd: hashedPassword,
+      // password: hashedPassword,
     };
 
-    const employee = await EmployeeService.AddEmployee(newEmployee);
+    // Call EmployeeRepository to add employee
+    const employee = await EmployeeRepository.add(newEmployee);
 
     if (employee) {
       return res.status(201).json(employee); // 201 Created
     } else {
-      return res.status(500).json({ message: 'Failed to create employee' });
+      return res.status(500).json({ message: 'Failed to create new employee' });
     }
   } catch (error) {
     console.error('Error adding new employee:', error);
     return res.status(500).json({ error: 'Internal Server Error' });
   }
 };
+/*----------------------------DeleteEmployee-------------------------*/
 export const DeleteEmployee = async (req: Request, res: Response) => {
   try {
     const employeeId = parseInt(req.params.id);
@@ -114,7 +170,7 @@ export const DeleteEmployee = async (req: Request, res: Response) => {
   }
 };
 
-// to get -> Employee by Position with query parameter position=(Manager)
+/* to get -> Employee by Position and Fullname with query parameter position=(Manager) name=(karim)*/
 export const getEmployeesByPosition = async (req: Request, res: Response) => {
   try {
     const position = req.query.position as string | null;

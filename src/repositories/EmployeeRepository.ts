@@ -16,6 +16,17 @@ class EmployeeRepository implements IEmployeeRepository {
     return Employee.create(employeeData);
   }
 
+  async findByEmail(email: string): Promise<Employee | null> {
+    return Employee.findOne({ where: { email } });
+  }
+
+  async findByFullName(
+    firstName: string,
+    lastName: string,
+  ): Promise<Employee | null> {
+    return Employee.findOne({ where: { firstName, lastName } });
+  }
+
   async update(id: number, employee: Partial<Employee>): Promise<void> {
     await Employee.update(employee, { where: { id } });
   }

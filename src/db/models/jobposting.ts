@@ -22,14 +22,17 @@ class JobPosting extends Model {
 
   static associate(models: any) {
     this.belongsTo(models.Employee, {
-      foreignKey: 'hiring_lead_id',
+      foreignKey: 'hiringLeadId',
       onDelete: 'SET NULL',
     });
     this.belongsTo(models.Department, {
-      foreignKey: 'department_id',
+      foreignKey: 'departmentId',
       onDelete: 'SET NULL',
     });
-    this.hasMany(models.Applicant);
+    this.hasMany(models.Applicant, {
+      foreignKey: 'jobId',
+      onDelete: 'CASCADE',
+    });
   }
 }
 

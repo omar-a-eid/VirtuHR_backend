@@ -20,7 +20,7 @@ class Applicant extends Model {
 
   static associate(models: any) {
     this.belongsTo(models.JobPosting, {
-      foreignKey: 'job_id',
+      foreignKey: 'jobId',
       onDelete: 'CASCADE',
     });
 

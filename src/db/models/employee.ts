@@ -232,6 +232,7 @@ class Employee extends Model {
   declare location: string;
   declare daysOffId: number;
   declare amountOfRaise: number;
+  declare dateOfBirth: Date;
   declare employmentType:
     | 'full time'
     | 'part time'
@@ -416,6 +417,9 @@ Employee.init(
           msg: 'Employment type must be one of full time, part time, freelance, or internship',
         },
       },
+    },
+    dateOfBirth: {
+      type: DataTypes.DATE,
     },
   },
   {

@@ -6,7 +6,7 @@ import {
 
 class EmployeeRepository implements IEmployeeRepository {
   async getAll(): Promise<Employee[]> {
-    return Employee.findAll();
+    return Employee.findAll({});
   }
 
   async getById(id: number): Promise<Employee | null> {

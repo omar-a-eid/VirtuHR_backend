@@ -1,3 +1,5 @@
+// services/ApplicantService.ts
+
 import ApplicantRepository from '../repositories/ApplicantRepository';
 import Applicant from '../db/models/applicant';
 import sequelize from '../config/database';
@@ -36,7 +38,7 @@ class ApplicantService {
     }
   }
 
-  //Update Applicant Status
+  // Update Applicant Status
   async updateApplicant(id: number, applicant_status: string): Promise<void> {
     let transaction;
     try {
@@ -52,6 +54,7 @@ class ApplicantService {
     }
   }
 
+  // Delete Applicant
   async deleteApplicant(id: number, softDelete: boolean): Promise<number> {
     try {
       const deletedCount = await ApplicantRepository.delete(id, softDelete);
@@ -59,6 +62,21 @@ class ApplicantService {
     } catch (error) {
       console.log('Error deleting applicant:', error);
       throw new Error(`Failed to delete applicant with ID ${id}`);
+    }
+  }
+
+  // Update Applicant CV Path
+  async updateApplicantCV(applicantId: number, cvPath: string): Promise<void> {
+    try {
+      await ApplicantRepository.updateCV(applicantId, cvPath);
+    } catch (error) {
+      console.log(
+        `Error updating CV path for applicant ID ${applicantId}:`,
+        error,
+      );
+      throw new Error(
+        `Failed to update CV path for applicant ID ${applicantId}`,
+      );
     }
   }
 }

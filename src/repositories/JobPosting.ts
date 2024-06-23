@@ -1,8 +1,11 @@
+import Employee from '../db/models/employee';
 import JobPosting from '../db/models/jobposting';
 import IJobPostingRepository from '../interfaces/IJobPostingRepository';
 class JobPostingRepository implements IJobPostingRepository {
   async getAll(): Promise<JobPosting[]> {
-    return JobPosting.findAll();
+    return JobPosting.findAll({
+      include: Employee,
+    });
   }
 
   async getById(id: number): Promise<JobPosting | null> {

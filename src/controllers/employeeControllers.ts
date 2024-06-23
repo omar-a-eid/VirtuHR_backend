@@ -1,10 +1,12 @@
 import { Request, Response } from 'express';
 import EmployeeRepository from '../repositories/EmployeeRepository';
-// import DepartmentRepository from '../repositories/DepartmentRepository';
 // import DaysOffRepository from '../repositories/DaysOffRepository';
+// import DivisionRepository from '../repositories/DivisionRepository';
 import EmployeeService from '../services/employeeService';
 import employeeSchema from './validationSchema';
+import DepartmentRepository from '../repositories/DepartmentRepository';
 import bcrypt from 'bcrypt';
+
 /*------------------------GetAllEmployee-----------------------*/
 export const getAllEmployees = async (req: Request, res: Response) => {
   try {
@@ -71,7 +73,7 @@ export const AddNewEmployee = async (req: Request, res: Response) => {
       return res.status(400).json({ error: error.message });
     }
 
-    const { email, firstName, lastName } = req.body;
+    const { email, firstName, lastName, departmentId, managerId } = req.body;
 
     /* check if the Email exists */
     const existingEmail = await EmployeeRepository.findByEmail(email);
@@ -93,30 +95,46 @@ export const AddNewEmployee = async (req: Request, res: Response) => {
       });
     }
 
-    // /* check if the DepartmentId doesnot exists */
-    // const existingDepartmentId =
-    //   await DepartmentRepository.findById(departmentId);
-    // if (!existingDepartmentId) {
-    //   return res.status(400).json({
-    //     error: `Department ID ${existingDepartmentId} does not exist`,
-    //   });
-    // }
+    /* check if the DepartmentId doesnot exists */
+    const existingDepartment =
+      await DepartmentRepository.findById(departmentId);
+    if (!existingDepartment) {
+      return res
+        .status(400)
+        .json({ error: `Department ID ${departmentId} does not exist` });
+    }
 
-    // /* check if the MangerId doesnot exists */
-    // const existingManagerId = await EmployeeRepository.getById(managerId);
-    // if (!existingManagerId) {
+    // Check if the ManagerId exists
+    const existingManager = await EmployeeRepository.getById(managerId);
+    if (!existingManager) {
+      return res
+        .status(400)
+        .json({ error: `Manager ID ${managerId} does not exist` });
+    }
+
+    // /* check if the Divisionid doesnot exists */
+    // const existingDivisionId = await DivisionRepository.findById(divisionId);
+    // if (!existingDivisionId) {
     //   return res
     //     .status(400)
-    //     .json({ error: `Manager ID ${existingManagerId} does not exist` });
+    //     .json({ error: `Division ID ${divisionId} does not exist` });
     // }
 
-    // /* check if the DaysOff doesnot exists */
+    /* check if the DaysOff doesnot exists */
     // const existingDaysOffId = await DaysOffRepository.findById(daysOffId);
     // if (!existingDaysOffId) {
     //   return res
     //     .status(400)
     //     .json({ error: `Days Off ID ${existingDaysOffId} does not exist` });
     // }
+    // console.log('******');
+    // console.log('******');
+    // console.log('******');
+    // console.log('******');
+    // console.log('******');
+    // console.log(`the departmentid is ${existingDepartment}`);
+    // console.log(`the dayoffid is ${existingDaysOffId}`);
+    // console.log(`the managerId is ${existingManager}`);
 
     // Hash the password
     // const saltRounds = 10;

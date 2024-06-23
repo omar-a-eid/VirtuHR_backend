@@ -70,7 +70,6 @@ export const createJobPosting = async (req: Request, res: Response) => {
   }
 };
 
-
 // Update an existing job posting
 export const updateJobPosting = async (req: Request, res: Response) => {
   const jobPostingId = parseInt(req.params.id);

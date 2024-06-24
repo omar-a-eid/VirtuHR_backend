@@ -5,7 +5,7 @@ import EmployeeRepository from '../repositories/EmployeeRepository';
 import EmployeeService from '../services/employeeService';
 import employeeSchema from './validationSchema';
 import DepartmentRepository from '../repositories/DepartmentRepository';
-import bcrypt from 'bcrypt';
+// import bcrypt from 'bcrypt';
 
 /*------------------------GetAllEmployee-----------------------*/
 export const getAllEmployees = async (req: Request, res: Response) => {
@@ -48,11 +48,11 @@ export const editEmployee = async (req: Request, res: Response) => {
   if (error) {
     return res.status(400).json({ error: error.details[0].message });
   }
-  const saltRounds = 10;
-  const hashedPassword = await bcrypt.hash(req.body.passowrd, saltRounds);
+  // const saltRounds = 10;
+  // const hashedPassword = await bcrypt.hash(req.body.passowrd, saltRounds);
   const newEmployee = {
     ...req.body,
-    passowrd: hashedPassword,
+    // passowrd: hashedPassword,
   };
 
   try {

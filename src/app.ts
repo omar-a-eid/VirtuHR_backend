@@ -3,9 +3,11 @@ import cors from 'cors';
 import 'dotenv/config';
 import express, { Application } from 'express';
 import './db/models/index';
+import attendenceRouters from './routes/AttendenceRouters';
 import departmentRouters from './routes/departmentRouters';
 import employeeRouters from './routes/employeeRouters';
 import terminationRouters from './routes/terminationRouters';
+
 class App {
   public app: Application;
 
@@ -28,6 +30,7 @@ class App {
     this.app.use('/api', employeeRouters);
     this.app.use('/api', departmentRouters);
     this.app.use('/api', terminationRouters);
+    this.app.use('/attendence', attendenceRouters);
   }
 }
 

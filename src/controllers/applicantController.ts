@@ -2,7 +2,6 @@ import { Request, Response } from 'express';
 import applicantSchema from './applicantValidationSchema';
 import ApplicantService from '../services/applicantService';
 import ApplicantRepository from '../repositories/ApplicantRepository';
-import { log } from 'console';
 
 const applicantRepository = new ApplicantRepository();
 const applicantService = new ApplicantService(applicantRepository);
@@ -113,16 +112,57 @@ export default class applicantController {
         res
           .status(400)
           .json({ error: error.details.map((x) => x.message).join(', ') });
+        return;
       }
 
-      const newApplicant = await applicantService.create(value);
+      if (!req.file) {
+        res.status(400).json({ error: 'No file uploaded' });
+        return;
+      }
+
+      const applicantData = {
+        ...value,
+        cvPath: req.file.path, // Assuming 'cvPath' is the name of the file field in the form
+      };
+
+      const newApplicant = await applicantService.create(applicantData);
       if (newApplicant) {
         res.status(200).json({ newApplicant });
       } else {
         res.status(500).json({ error: 'Failed to create new applicant' });
       }
     } catch (error) {
-      console.log('Error adding new applicant:', error);
+      console.error('Error adding new applicant:', error);
+      res.status(500).json({ error: 'Internal server error' });
+    }
+  }
+
+  public static async downloadApplicantCV(
+    req: Request,
+    res: Response,
+  ): Promise<void> {
+    const applicantId = parseInt(req.params.id);
+    const applicantName = req.body.fullName;
+    try {
+      const applicant = await applicantService.getById(applicantId);
+
+      if (!applicant) {
+        res
+          .status(404)
+          .json({ error: `Applicant with ID ${applicantName} not found` });
+        return;
+      }
+
+      const cvPath = applicant.cvPath; // Assuming cvPath is the field where the CV file path is stored
+      const fileName = `CV_${applicantName}.pdf`; // Generate a filename here, adjust as needed
+
+      // Send the file as a download
+      res.download(cvPath, fileName);
+    } catch (error) {
+      console.error(
+        `Error downloading CV for applicant with ID ${applicantId}:`,
+        error,
+      );
       res.status(500).json({ error: 'Internal server error' });
     }
   }

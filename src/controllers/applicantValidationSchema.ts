@@ -23,11 +23,11 @@ const applicantSchema = Joi.object({
       'string.max': 'Phone number must be less than or equal to 50 characters',
       'any.required': 'Phone number is required',
     }),
-  cvPath: Joi.string().max(255).required().messages({
-    'string.empty': 'CV path is required',
-    'any.required': 'CV path is required',
-    'string.max': 'CV path must be less than or equal to 255 characters',
-  }),
+  // cvPath: Joi.string().max(255).required().messages({
+  //   'string.empty': 'CV path is required',
+  //   'any.required': 'CV path is required',
+  //   'string.max': 'CV path must be less than or equal to 255 characters',
+  // }),
   applicantStatus: Joi.string()
     .valid('applied', 'interviewing', 'hired', 'rejected')
     .required()

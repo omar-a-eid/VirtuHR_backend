@@ -9,7 +9,7 @@ export default class DepartmentRepository extends BaseRepository<Department> {
 
   // If you have additional methods specific to Department, you can add them here
   public async getByIdAll(id: number) {
-    return Department.findByPk(id, {
+    return await Department.findByPk(id, {
       include: {
         model: Employee,
         as: 'departmentEmployees',

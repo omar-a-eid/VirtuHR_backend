@@ -106,4 +106,3 @@ export const getMonthlyHours = async (req: Request, res: Response) => {
     return res.status(500).json({ error: 'Internal Server Error' });
   }
 };
-// i want to make validation for the checkIn function if aleready checked in say in message that you are already checked in

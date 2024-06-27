@@ -7,6 +7,8 @@ import attendenceRouters from './routes/AttendenceRouters';
 import authRouters from './routes/authRouters';
 import departmentRouters from './routes/departmentRouters';
 import employeeRouters from './routes/employeeRouters';
+import leaveRequestRouters from './routes/leaveRequestRouters';
+import reportRouter from './routes/reportRouters';
 import terminationRouters from './routes/terminationRouters';
 class App {
   public app: Application;
@@ -30,6 +32,9 @@ class App {
     this.app.use('/api', employeeRouters);
     this.app.use('/api', departmentRouters);
     this.app.use('/api', terminationRouters);
+    this.app.use('/api', leaveRequestRouters);
+    this.app.use('/api', reportRouter);
+
     this.app.use('/api', authRouters);
     this.app.use('/attendence', attendenceRouters);
   }

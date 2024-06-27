@@ -15,7 +15,7 @@ class LeaveRequest extends Model {
 
   static associate(models: any) {
     this.belongsTo(models.Employee, {
-      foreignKey: 'employeeId',
+      foreignKey: 'employee_id',
       onDelete: 'CASCADE',
     });
   }

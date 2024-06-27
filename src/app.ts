@@ -6,6 +6,8 @@ import './db/models/index';
 import departmentRouters from './routes/departmentRouters';
 import employeeRouters from './routes/employeeRouters';
 import terminationRouters from './routes/terminationRouters';
+import leaveRequestRouters from './routes/leaveRequestRouters';
+import reportRouter from './routes/reportRouters';
 class App {
   public app: Application;
 
@@ -28,6 +30,9 @@ class App {
     this.app.use('/api', employeeRouters);
     this.app.use('/api', departmentRouters);
     this.app.use('/api', terminationRouters);
+    this.app.use('/api', leaveRequestRouters);
+    this.app.use('/api', reportRouter);
+
   }
 }
 

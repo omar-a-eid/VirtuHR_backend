@@ -23,8 +23,8 @@
 // export default router;
 
 import express from 'express';
+import EmployeeController from '../controllers/employeeController';
 const router = express.Router();
-import EmployeeController from '../controllers/employeeControllers';
 
 // to get -> Employee by Position with query parameter position=(Manager)
 

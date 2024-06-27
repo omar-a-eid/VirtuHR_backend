@@ -23,16 +23,24 @@ export default {
       },
       image: {
         type: DataTypes.STRING(255),
+        allowNull: true,
       },
       password: {
         type: DataTypes.STRING,
       },
       phone: {
         type: DataTypes.STRING(50),
+        validate: {
+          is: {
+            args: /^[\d\-+\s]+$/,
+            msg: 'Phone number must be valid',
+          },
+        },
+        allowNull: true,
       },
       position: {
         type: DataTypes.STRING(100),
-        allowNull: false,
+        allowNull: true,
       },
       department_id: {
         type: DataTypes.INTEGER,
@@ -44,7 +52,7 @@ export default {
       },
       salary: {
         type: DataTypes.INTEGER,
-        allowNull: false,
+        allowNull: true,
         validate: {
           min: 0,
         },
@@ -54,13 +62,14 @@ export default {
       deleted_at: DataTypes.DATE,
       gender: {
         type: DataTypes.ENUM('M', 'F'),
-        allowNull: false,
+        allowNull: true,
         validate: {
           isIn: [['M', 'F']],
         },
       },
       hire_date: {
         type: DataTypes.DATE,
+        defaultValue: Date.now(),
       },
       manager_id: {
         type: DataTypes.INTEGER,
@@ -69,9 +78,11 @@ export default {
           key: 'id',
         },
         onDelete: 'SET NULL',
+        allowNull: true,
       },
       location: {
         type: DataTypes.STRING(255),
+        allowNull: true,
       },
       days_off_id: {
         type: DataTypes.INTEGER,
@@ -80,6 +91,7 @@ export default {
           key: 'id',
         },
         onDelete: 'SET NULL',
+        allowNull: true,
       },
       employment_type: {
         type: DataTypes.STRING(20),
@@ -88,6 +100,30 @@ export default {
         validate: {
           isIn: [['full time', 'part time', 'freelance', 'internship']],
         },
+      },
+      company_id: {
+        type: DataTypes.INTEGER,
+        references: {
+          model: 'companies',
+          key: 'id',
+        },
+        onDelete: 'SET NULL',
+        allowNull: false,
+      },
+      role: {
+        type: DataTypes.ENUM('admin', 'employee'),
+        allowNull: false,
+        defaultValue: 'employee',
+        validate: {
+          isIn: {
+            args: [['admin', 'employee']],
+            msg: 'Employment type must be one of admin or employee',
+          },
+        },
+      },
+      date_of_birth: {
+        allowNull: true,
+        type: DataTypes.DATE,
       },
     });
   },

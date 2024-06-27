@@ -31,7 +31,7 @@
 
 import Employee from '../db/models/employee';
 import EmployeeRepository from '../repositories/EmployeeRepository';
-import BaseService from './BaseService';
+import BaseService from './baseService';
 
 export default class EmployeeService extends BaseService<Employee> {
   private employeeRepository: EmployeeRepository;

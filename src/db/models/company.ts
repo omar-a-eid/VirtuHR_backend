@@ -2,7 +2,6 @@ import { DataTypes, Model } from 'sequelize';
 import sequelize from '../../config/database';
 class Company extends Model {
   declare id: number;
-  declare domain: string;
   declare domainName: string;
   declare companySize:
     | '1-24'

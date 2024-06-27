@@ -40,6 +40,11 @@ export default class EmployeeService extends BaseService<Employee> {
     super(Employee);
     this.employeeRepository = employeeRepository;
   }
+
+  public async getAll(): Promise<Employee[]> {
+    return this.employeeRepository.getAll();
+  }
+
   public async getById(employeeId: number): Promise<Employee | null> {
     return this.employeeRepository.getById(employeeId);
   }

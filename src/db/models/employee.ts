@@ -6,21 +6,23 @@ class Employee extends Model {
   declare firstName: string;
   declare lastName: string;
   declare email: string;
+  declare image?: string;
+  declare password: string;
   declare phone?: string;
-  declare position: string;
-  declare departmentId: number;
-  declare salary: number;
+  declare position?: string;
+  declare departmentId?: number;
+  declare salary?: number;
   declare createdAt: Date;
   declare updatedAt: Date;
   declare deletedAt: Date | null;
-  declare gender: 'M' | 'F';
-  declare hireDate: Date;
+  declare gender?: 'M' | 'F';
+  declare hireDate?: Date;
   declare managerId?: number;
-  declare location: string;
-  declare daysOffId: number;
-  declare amountOfRaise: number;
+  declare location?: string;
+  declare daysOffId?: number;
+  declare role: 'admin' | 'employee';
   declare companyId: number;
-  declare dateOfBirth: Date;
+  declare dateOfBirth?: Date;
   declare employmentType:
     | 'full time'
     | 'part time'

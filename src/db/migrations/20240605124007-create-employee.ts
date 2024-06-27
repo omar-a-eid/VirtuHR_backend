@@ -121,10 +121,6 @@ export default {
           },
         },
       },
-      date_of_birth: {
-        allowNull: true,
-        type: DataTypes.DATE,
-      },
     });
   },
   down: async (queryInterface: QueryInterface) => {

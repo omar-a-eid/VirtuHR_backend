@@ -81,6 +81,21 @@ export default class EmployeeRepository extends BaseRepository<Employee> {
     super(Employee);
   }
 
+  public async getAll(): Promise<Employee[]> {
+    return await Employee.findAll({
+      attributes: [
+        'id',
+        'firstName',
+        'lastName',
+        'position',
+        'location',
+        'phone',
+        'employmentType',
+        'hireDate',
+      ],
+    });
+  }
+
   public async getById(employeeId: number): Promise<Employee | null> {
     return Employee.findByPk(employeeId);
   }

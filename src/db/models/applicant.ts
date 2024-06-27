@@ -16,10 +16,11 @@ class Applicant extends Model {
   declare graduationDate: Date;
   declare createdAt: Date;
   declare updatedAt: Date;
+  declare deletedAt?: Date | null;
 
   static associate(models: any) {
     this.belongsTo(models.JobPosting, {
-      foreignKey: 'job_id',
+      foreignKey: 'jobId',
       onDelete: 'CASCADE',
     });
 
@@ -83,12 +84,14 @@ Applicant.init(
     },
     createdAt: DataTypes.DATE,
     updatedAt: DataTypes.DATE,
+    deletedAt: DataTypes.DATE,
   },
   {
     sequelize,
     modelName: 'Applicant',
     timestamps: true,
     underscored: true,
+    paranoid: true, // Enables soft delete functionality
   },
 );
 

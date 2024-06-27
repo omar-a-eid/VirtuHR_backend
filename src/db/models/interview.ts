@@ -20,11 +20,11 @@ class Interview extends Model {
 
   static associate(models: any) {
     this.belongsTo(models.Applicant, {
-      foreignKey: 'applicant_id',
+      foreignKey: 'applicantId',
       onDelete: 'CASCADE',
     });
     this.belongsTo(models.Employee, {
-      foreignKey: 'hiring_manager_id',
+      foreignKey: 'hiringManagerId',
       onDelete: 'SET NULL',
     });
   }

@@ -5,31 +5,34 @@ class JobPosting extends Model {
   declare id: number;
   declare title: string;
   declare jobStatus: 'archived' | 'active';
-  declare hiringLeadId: number;
-  declare departmentId: number;
+  declare hiringLeadId: string;
+  declare department: string;
   declare employmentType:
     | 'full time'
     | 'part time'
     | 'freelance'
     | 'internship';
-  declare minimumExperience: number;
+  declare minimumExperience: string;
   declare compensation: number;
   declare description: string;
-  declare location: JSON;
+  declare location: string;
 
   declare createdAt: Date;
   declare updatedAt: Date;
 
   static associate(models: any) {
     this.belongsTo(models.Employee, {
-      foreignKey: 'hiring_lead_id',
+      foreignKey: 'hiringLeadId',
       onDelete: 'SET NULL',
     });
     this.belongsTo(models.Department, {
-      foreignKey: 'department_id',
+      foreignKey: 'departmentId',
       onDelete: 'SET NULL',
     });
-    this.hasMany(models.Applicant);
+    this.hasMany(models.Applicant, {
+      foreignKey: 'jobId',
+      onDelete: 'CASCADE',
+    });
   }
 }
 
@@ -65,16 +68,17 @@ JobPosting.init(
       type: DataTypes.ENUM('full time', 'part time', 'freelance', 'internship'),
     },
     minimumExperience: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.STRING,
     },
     compensation: {
       type: DataTypes.INTEGER,
     },
     description: {
-      type: DataTypes.JSON,
+      type: DataTypes.STRING,
     },
     location: {
       type: DataTypes.STRING,
+      allowNull: true,
     },
     createdAt: DataTypes.DATE,
     updatedAt: DataTypes.DATE,

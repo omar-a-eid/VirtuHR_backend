@@ -81,7 +81,10 @@ class Employee extends Model {
     this.hasMany(models.Goal);
     this.hasMany(models.Comment);
     this.hasMany(models.FeedbackAnswer);
-    this.hasMany(models.JobPosting);
+    this.hasMany(models.JobPosting, {
+      foreignKey: 'hiringLeadId',
+      onDelete: 'SET NULL',
+    });
     this.hasMany(models.LeaveRequest);
   }
 }

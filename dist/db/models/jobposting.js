@@ -31,6 +31,22 @@ JobPosting.init({
     jobStatus: {
         type: sequelize_1.DataTypes.ENUM('archived', 'active'),
     },
+<<<<<<< HEAD
+    // hiringLeadId: {
+    //   type: DataTypes.INTEGER,
+    //   references: {
+    //     model: 'employees',
+    //     key: 'id',
+    //   },
+    // },
+    // departmentId: {
+    //   type: DataTypes.INTEGER,
+    //   references: {
+    //     model: 'departments',
+    //     key: 'id',
+    //   },
+    // },
+=======
     hiringLeadId: {
         type: sequelize_1.DataTypes.INTEGER,
         references: {
@@ -45,6 +61,7 @@ JobPosting.init({
             key: 'id',
         },
     },
+>>>>>>> Employee
     employmentType: {
         type: sequelize_1.DataTypes.ENUM('full time', 'part time', 'freelance', 'internship'),
     },

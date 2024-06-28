@@ -48,4 +48,12 @@ export default class EmployeeService extends BaseService<Employee> {
   public async getById(employeeId: number): Promise<Employee | null> {
     return this.employeeRepository.getById(employeeId);
   }
+
+  public async findByEmail(email: string): Promise<Employee | null> {
+    return await this.employeeRepository.findByEmail(email);
+  }
+
+  public async getLoggedIn(employeeId: number): Promise<Employee | null> {
+    return await this.employeeRepository.getLoggedIn(employeeId);
+  }
 }

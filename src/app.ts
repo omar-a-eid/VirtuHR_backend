@@ -2,16 +2,18 @@ import bodyParser from 'body-parser';
 import cors from 'cors';
 import 'dotenv/config';
 import express, { Application, Request, Response } from 'express';
-import jobPostingRouters from './routes/jobPostingRouters';
-import applicantRouters from './routes/applicantRouters';
 import './db/models/index';
 import attendenceRouters from './routes/AttendenceRouters';
+import applicantRouters from './routes/applicantRouters';
 import authRouters from './routes/authRouters';
 import departmentRouters from './routes/departmentRouters';
 import employeeRouters from './routes/employeeRouters';
+import goalRouters from './routes/goalRouters';
+import jobPostingRouters from './routes/jobPostingRouters';
 import leaveRequestRouters from './routes/leaveRequestRouters';
 import reportRouter from './routes/reportRouters';
 import terminationRouters from './routes/terminationRouters';
+
 import multer from 'multer';
 import announcementRouter from './routes/announcementRouter';
 
@@ -45,6 +47,7 @@ class App {
     this.app.use('/api', leaveRequestRouters);
     this.app.use('/api', reportRouter);
     this.app.use('/api', announcementRouter);
+    this.app.use('/api', goalRouters);
 
     this.app.use('/api', authRouters);
     this.app.use('/attendence', attendenceRouters);

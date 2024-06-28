@@ -2,6 +2,7 @@ import { DataTypes, Model } from 'sequelize';
 import sequelize from '../../config/database';
 
 class Department extends Model {
+  [x: string]: any;
   declare id: number;
   declare name: string;
   declare managerId: number | null;

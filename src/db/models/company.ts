@@ -3,6 +3,8 @@ import sequelize from '../../config/database';
 class Company extends Model {
   declare id: number;
   declare domainName: string;
+  declare companyName: string;
+  declare country: string;
   declare companySize:
     | '1-24'
     | '25-75'
@@ -33,6 +35,14 @@ Company.init(
       type: DataTypes.STRING,
       allowNull: false,
       unique: true,
+    },
+    companyName: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    country: {
+      type: DataTypes.STRING,
+      allowNull: true,
     },
     companySize: {
       type: DataTypes.ENUM(

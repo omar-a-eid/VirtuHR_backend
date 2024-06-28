@@ -7,16 +7,16 @@ class Goal extends Model {
   declare assignedTo: number | null;
   declare dueDate: Date;
   declare note: string;
-  declare progress: number;
+  declare isCompleted: boolean;
   declare createdAt: Date;
   declare updatedAt: Date;
 
   static associate(models: any) {
     this.belongsTo(models.Employee, {
-      foreignKey: 'assigned_to',
+      foreignKey: 'assignedTo',
       onDelete: 'SET NULL',
     });
-    this.belongsToMany(models.Employee, { through: 'employees_goals' });
+    // this.belongsToMany(models.Employee, { through: 'employees_goals' });
 
     this.hasMany(models.Comment);
     this.hasMany(models.Milestone);
@@ -50,12 +50,9 @@ Goal.init(
     note: {
       type: DataTypes.TEXT,
     },
-    progress: {
-      type: DataTypes.INTEGER,
-      validate: {
-        min: 0,
-        max: 100,
-      },
+    isCompleted: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false,
     },
   },
   {

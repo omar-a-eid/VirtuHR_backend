@@ -22,7 +22,11 @@ const employeeSchema = Joi.object({
   image: Joi.string().max(255).optional().allow(null).messages({
     'string.max': 'Image URL must be less than or equal to 255 characters',
   }),
-  passowrd: Joi.string(),
+  password: Joi.string()
+    .regex(
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
+    )
+    .required(),
   phone: Joi.string()
     .max(50)
     .optional()
@@ -39,6 +43,7 @@ const employeeSchema = Joi.object({
   departmentId: Joi.number().integer().optional().allow(null).messages({
     'number.base': 'Department ID must be an integer',
   }),
+  companyId: Joi.number().required(),
   salary: Joi.number().integer().min(0).required().messages({
     'number.base': 'Salary must be a number',
     'number.min': 'Salary must be greater than or equal to zero',
@@ -82,3 +87,46 @@ const employeeSchema = Joi.object({
 });
 
 export default employeeSchema;
+
+// import * as Joi from 'joi';
+
+// export const employeeSchema = Joi.object({
+//   firstName: Joi.string()
+//     .regex(/^[a-zA-Z]+$/)
+//     .min(4)
+//     .max(20)
+//     .required(),
+//   lastName: Joi.string()
+//     .regex(/^[a-zA-Z]+$/)
+//     .min(3)
+//     .max(20)
+//     .required(),
+//   email: Joi.string()
+//     .email()
+//     .regex(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/)
+//     .required(),
+//   password: Joi.string()
+//     .regex(
+//       /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
+//     )
+//     .required(),
+//   gender: Joi.string().valid('M', 'F').required(),
+//   phone: Joi.string()
+//     .length(11)
+//     .regex(/^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s./0-9]*$/)
+//     .required(),
+//   position: Joi.string()
+//     .valid('Manager', 'NewEmployee', 'HR Employee', 'IT Specialist')
+//     .required(),
+//   departmentId: Joi.number().required(),
+//   companyId: Joi.number().required(),
+//   salary: Joi.number().required(),
+//   hireDate: Joi.date().required(),
+//   managerId: Joi.number().required(),
+//   location: Joi.string()
+//     .regex(/^[a-zA-Z\s]+$/)
+//     .required(),
+//   employmentType: Joi.string()
+//     .valid('full time', 'part time', 'freelance', 'internship')
+//     .required(),
+// });

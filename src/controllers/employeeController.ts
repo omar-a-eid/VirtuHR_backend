@@ -215,7 +215,7 @@ import { ValidationError } from 'sequelize';
 import EmployeeRepository from '../repositories/EmployeeRepository';
 import EmployeeService from '../services/employeeService';
 import employeeSchema from './validationSchema';
-// import bcrypt from 'bcrypt';
+import bcrypt from 'bcrypt';
 
 // Create instances of EmployeeRepository and EmployeeService
 const employeeRepository = new EmployeeRepository();
@@ -273,11 +273,11 @@ export default class EmployeeController {
     if (error) {
       res.status(400).json({ error: error.details[0].message });
     }
-    // const saltRounds = 10;
-    // const hashedPassword = await bcrypt.hash(req.body.password, saltRounds);
+    const saltRounds = 10;
+    const hashedPassword = await bcrypt.hash(req.body.password, saltRounds);
     const newEmployee = {
       ...req.body,
-      // password: hashedPassword,
+      password: hashedPassword,
     };
 
     try {
@@ -291,6 +291,35 @@ export default class EmployeeController {
   }
 
   /*----------------------------AddNewEmployee-------------------------*/
+  // public static async AddNewEmployee(
+  //   req: Request,
+  //   res: Response,
+  // ): Promise<void> {
+  //   try {
+  //     const { error } = employeeSchema.validate(req.body);
+  //     if (error) {
+  //       res.status(400).json({ error: error.details[0].message });
+  //     }
+  //     // const saltRounds = 10;
+  //     // const hashedPassword = await bcrypt.hash(req.body.password, saltRounds);
+  //     const newEmployee = {
+  //       ...req.body,
+  //       // password: hashedPassword,
+  //     };
+
+  //     const employee = await employeeService.create(newEmployee);
+
+  //     if (employee) {
+  //       res.status(201).json(employee); // 201 Created
+  //     } else {
+  //       res.status(500).json({ message: 'Failed to create employee' });
+  //     }
+  //   } catch (error) {
+  //     console.error('Error adding new employee:', error);
+  //     res.status(500).json({ error: 'Internal Server Error' });
+  //   }
+  // }
+
   public static async AddNewEmployee(
     req: Request,
     res: Response,
@@ -299,27 +328,35 @@ export default class EmployeeController {
       const { error } = employeeSchema.validate(req.body);
       if (error) {
         res.status(400).json({ error: error.details[0].message });
+        return;
       }
-      // const saltRounds = 10;
-      // const hashedPassword = await bcrypt.hash(req.body.password, saltRounds);
+
       const newEmployee = {
         ...req.body,
-        // password: hashedPassword,
       };
 
-      const employee = await employeeService.create(newEmployee);
+      try {
+        const employee = await employeeService.create(newEmployee);
 
-      if (employee) {
-        res.status(201).json(employee); // 201 Created
-      } else {
-        res.status(500).json({ message: 'Failed to create employee' });
+        if (employee) {
+          res.status(201).json(employee); // Successfully created
+        } else {
+          res.status(500).json({ message: 'Failed to create employee' });
+        }
+      } catch (dbError: any) {
+        if (dbError.code === '23505') {
+          // PostgreSQL unique violation error code
+          res.status(400).json({ error: 'Employee already exists' });
+        } else {
+          console.error('Database error:', dbError);
+          res.status(500).json({ error: 'Internal Server Error' });
+        }
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error adding new employee:', error);
       res.status(500).json({ error: 'Internal Server Error' });
     }
   }
-
   /*----------------------------DeleteEmployee-------------------------*/
   public static async DeleteEmployee(
     req: Request,

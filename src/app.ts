@@ -13,6 +13,7 @@ import leaveRequestRouters from './routes/leaveRequestRouters';
 import reportRouter from './routes/reportRouters';
 import terminationRouters from './routes/terminationRouters';
 import multer from 'multer';
+import announcementRouter from './routes/announcementRouter';
 
 // Create a Multer instance with a destination folder for file uploads
 const upload = multer({ dest: 'uploads/' });
@@ -43,6 +44,7 @@ class App {
     this.app.use('/api', terminationRouters);
     this.app.use('/api', leaveRequestRouters);
     this.app.use('/api', reportRouter);
+    this.app.use('/api', announcementRouter);
 
     this.app.use('/api', authRouters);
     this.app.use('/attendence', attendenceRouters);

@@ -53,7 +53,7 @@ class Employee extends Model {
       through: 'announcements_send_to',
     });
     this.belongsToMany(models.Cycle, { through: 'employees_cycles' });
-    this.belongsToMany(models.Goal, { through: 'employees_goals' });
+    // this.belongsToMany(models.Goal, { through: 'employees_goals' });
 
     this.belongsTo(models.Company, {
       foreignKey: 'companyId',
@@ -80,7 +80,10 @@ class Employee extends Model {
     this.hasMany(models.Assessment);
     this.hasMany(models.Attendance);
     this.hasMany(models.Feedback);
-    this.hasMany(models.Goal);
+    this.hasMany(models.Goal, {
+      foreignKey: 'assignedTo',
+      onDelete: 'SET NULL',
+    });
     this.hasMany(models.Comment);
     this.hasMany(models.FeedbackAnswer);
     this.hasMany(models.JobPosting, {

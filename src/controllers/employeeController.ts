@@ -214,7 +214,7 @@ import { Request, Response } from 'express';
 import EmployeeRepository from '../repositories/EmployeeRepository';
 import EmployeeService from '../services/employeeService';
 import employeeSchema from './validationSchema';
-// import bcrypt from 'bcrypt';
+import bcrypt from 'bcrypt';
 
 // Create instances of EmployeeRepository and EmployeeService
 const employeeRepository = new EmployeeRepository();
@@ -272,11 +272,11 @@ export default class EmployeeController {
     if (error) {
       res.status(400).json({ error: error.details[0].message });
     }
-    // const saltRounds = 10;
-    // const hashedPassword = await bcrypt.hash(req.body.password, saltRounds);
+    const saltRounds = 10;
+    const hashedPassword = await bcrypt.hash(req.body.password, saltRounds);
     const newEmployee = {
       ...req.body,
-      // password: hashedPassword,
+      password: hashedPassword,
     };
 
     try {

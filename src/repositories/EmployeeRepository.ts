@@ -69,6 +69,8 @@
 
 // export default new EmployeeRepository();
 
+import Company from '../db/models/company';
+import DaysOff from '../db/models/daysoff';
 import Employee from '../db/models/employee';
 import BaseRepository from './BaseRepository';
 
@@ -125,5 +127,24 @@ export default class EmployeeRepository extends BaseRepository<Employee> {
     employees.employees = rows;
     employees.count = count;
     return employees;
+  }
+
+  public async findByEmail(email: string): Promise<Employee | null> {
+    return await Employee.findOne({ where: { email } });
+  }
+
+  public async getLoggedIn(employeeId: number): Promise<Employee | null> {
+    return await Employee.findByPk(employeeId, {
+      include: [
+        {
+          model: Company,
+          as: 'company',
+        },
+        {
+          model: DaysOff,
+          as: 'daysOff',
+        },
+      ],
+    });
   }
 }

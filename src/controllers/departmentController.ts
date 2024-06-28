@@ -91,4 +91,22 @@ export default class DepartmentController {
       }
     }
   }
+
+  public static async getEmployees(req: Request, res: Response): Promise<void> {
+    try {
+      const { id } = req.params;
+      const department = await departmentService.getEmployees(Number(id));
+      if (department && department.departmentEmployees.length > 1) {
+        res.status(200).json(department.departmentEmployees);
+      } else {
+        res.status(404).json({ message: 'Data not found' });
+      }
+    } catch (error) {
+      if (error instanceof Error) {
+        res.status(500).json({ error: error.message });
+      } else {
+        res.status(500).json({ error: 'An unknown error occurred' });
+      }
+    }
+  }
 }

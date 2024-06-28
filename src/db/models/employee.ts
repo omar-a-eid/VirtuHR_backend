@@ -55,7 +55,7 @@ class Employee extends Model {
     this.belongsToMany(models.Cycle, { through: 'employees_cycles' });
     this.belongsToMany(models.Goal, { through: 'employees_goals' });
 
-    this.belongsTo(models.DaysOff, {
+    this.belongsTo(models.Company, {
       foreignKey: 'companyId',
       as: 'company',
       onDelete: 'SET NULL',
@@ -106,7 +106,7 @@ Employee.init(
           msg: 'First name is required',
         },
         len: {
-          args: [4, 30],
+          args: [3, 30],
           msg: 'First name must be between 4 and 30 characters',
         },
       },
@@ -119,7 +119,7 @@ Employee.init(
           msg: 'Last name is required',
         },
         len: {
-          args: [4, 30],
+          args: [3, 30],
           msg: 'Last name must be between 4 and 30 characters',
         },
       },

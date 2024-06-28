@@ -10,8 +10,7 @@ export default class DepartmentService extends BaseService<Department> {
     this.departmentRepository = departmentRepository;
   }
 
-  // Add any additional methods specific to DepartmentService if needed
-  async getById(id: number) {
-    return await this.departmentRepository.getByIdAll(id);
+  async getEmployees(id: number) {
+    return await this.departmentRepository.getEmployees(id);
   }
 }

@@ -211,6 +211,7 @@
 // };
 
 import { Request, Response } from 'express';
+import { ValidationError } from 'sequelize';
 import EmployeeRepository from '../repositories/EmployeeRepository';
 import EmployeeService from '../services/employeeService';
 import employeeSchema from './validationSchema';
@@ -365,6 +366,31 @@ export default class EmployeeController {
     } catch (error) {
       console.error('Error fetching employees by position:', error);
       res.status(500).json({ error: 'Internal Server Error!!' });
+    }
+  }
+
+  public static async getLoggedInUser(
+    req: Request,
+    res: Response,
+  ): Promise<void> {
+    try {
+      const { id } = req.params;
+      console.log(id);
+      const employee = await employeeRepository.getLoggedIn(parseInt(id, 10));
+
+      if (employee) {
+        res.status(200).json(employee);
+      } else {
+        res.status(404).json({
+          message: 'No employees found',
+        });
+      }
+    } catch (error) {
+      if (error instanceof ValidationError) {
+        res.status(500).json({ error: error.errors });
+      } else {
+        res.status(500).json({ error: error });
+      }
     }
   }
 }

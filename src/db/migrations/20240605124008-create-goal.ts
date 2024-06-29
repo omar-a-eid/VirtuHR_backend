@@ -28,12 +28,8 @@ export default {
       note: {
         type: DataTypes.TEXT,
       },
-      progress: {
-        type: DataTypes.INTEGER,
-        validate: {
-          min: 0,
-          max: 100,
-        },
+      is_completed: {
+        type: DataTypes.BOOLEAN,
       },
     });
   },

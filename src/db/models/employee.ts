@@ -58,7 +58,7 @@ class Employee extends Model {
     this.belongsTo(models.Company, {
       foreignKey: 'companyId',
       as: 'company',
-      onDelete: 'SET NULL',
+      onDelete: 'CASCADE',
     });
 
     this.hasOne(models.Department, {
@@ -234,7 +234,7 @@ Employee.init(
         model: 'companies',
         key: 'id',
       },
-      onDelete: 'SET NULL',
+      onDelete: 'CASCADE',
       allowNull: false,
     },
     role: {

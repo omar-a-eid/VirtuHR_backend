@@ -18,16 +18,17 @@ export default {
         onDelete: 'CASCADE',
       },
       start_time: {
-        type: DataTypes.TIME,
+        type: DataTypes.DATE,
         allowNull: false,
       },
       end_time: {
-        type: DataTypes.TIME,
+        type: DataTypes.DATE,
         allowNull: false,
       },
       status: {
         type: DataTypes.ENUM('rejected', 'accepted', 'pending'),
         allowNull: false,
+        defaultValue: 'pending',
         validate: {
           isIn: [['rejected', 'accepted', 'pending']],
         },

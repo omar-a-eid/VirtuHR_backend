@@ -95,6 +95,13 @@ export default class EmployeeRepository extends BaseRepository<Employee> {
         'phone',
         'employmentType',
         'hireDate',
+        'salary',
+        'departmentId',
+        'dateOfBirth',
+        'createdAt',
+        'gender',
+        'managerId',
+        
       ],
     });
   }

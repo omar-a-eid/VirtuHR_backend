@@ -107,7 +107,7 @@ export default {
           model: 'companies',
           key: 'id',
         },
-        onDelete: 'SET NULL',
+        onDelete: 'CASCADE',
         allowNull: false,
       },
       role: {

@@ -9,9 +9,9 @@ import {
   getMonthlyHours,
 } from '../controllers/attendanceController';
 
-router.post('/checkin', checkIn);
-router.post('/checkout', checkOut);
-router.get('/dailyhours', getDailyHours);
-router.get('/monthlyhours', getMonthlyHours);
+router.post('/attendance/checkin', checkIn);
+router.post('/attendance/checkout', checkOut);
+router.get('/attendance/dailyhours', getDailyHours);
+router.get('/attendance/monthlyhours', getMonthlyHours);
 
 export default router;

@@ -7,6 +7,7 @@
     "dev": "ts-node-dev src/server.ts",
     "build": "npx tsc",
     "start": "npx tsc && node dist/server.js",
+    "init": " npx sequelize-cli db:create && npx sequelize-cli db:migrate",
     "up": "npx sequelize-cli db:migrate",
     "create": "npx sequelize-cli db:create",
     "seed": "npx sequelize-cli db:seed:all",

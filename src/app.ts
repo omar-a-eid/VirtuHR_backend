@@ -16,7 +16,7 @@ import terminationRouters from './routes/terminationRouters';
 
 import multer from 'multer';
 import announcementRouter from './routes/announcementRouter';
-
+import companyRouters from './routes/companyRouters';
 // Create a Multer instance with a destination folder for file uploads
 const upload = multer({ dest: 'uploads/' });
 
@@ -51,6 +51,7 @@ class App {
 
     this.app.use('/api', authRouters);
     this.app.use('/attendence', attendenceRouters);
+    this.app.use('/api', companyRouters);
 
     // Define a POST route for file uploads using Multer middleware
     this.app.post(

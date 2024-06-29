@@ -7,19 +7,6 @@ class LeaveRequestService {
     return await LeaveRequestRepository.create(data);
   }
 
-
-  // async createLeaveRequest(data: any): Promise<LeaveRequest> {
-  //   // Convert date strings to Date objects if necessary
-  //   const { startTime, endTime, ...rest } = data;
-  //   const leaveRequestData = {
-  //     ...rest,
-  //     startTime: new Date(startTime),
-  //     endTime: new Date(endTime),
-  //   };
-
-  //   return await LeaveRequestRepository.create(leaveRequestData);
-  // }
-
   async getLeaveRequestById(id: number): Promise<LeaveRequest | null> {
     return await LeaveRequestRepository.findById(id);
   }

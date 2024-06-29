@@ -91,6 +91,7 @@ export default class EmployeeRepository extends BaseRepository<Employee> {
         'lastName',
         'position',
         'location',
+        'email',
         'phone',
         'employmentType',
         'hireDate',

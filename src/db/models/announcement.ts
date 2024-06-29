@@ -1,20 +1,20 @@
 import { DataTypes, Model } from 'sequelize';
 import sequelize from '../../config/database';
+
 class Announcement extends Model {
-  declare id: number;
-  declare title: string;
-  declare description: string;
-  declare employId: number;
-  declare sendToAll: boolean;
-  declare createdAt: Date;
-  declare updatedAt: Date;
-  declare deletedAt: Date;
-  // for status we will use soft delete
+  public id!: number;
+  public title!: string;
+  public description!: string;
+  public employeeId!: number;
+  public sendToAll!: boolean;
+  public createdAt!: Date;
+  public updatedAt!: Date;
+  public deletedAt!: Date | null;
 
   static associate(models: any) {
     this.belongsToMany(models.Employee, { through: 'announcements_send_to' });
     this.belongsTo(models.Employee, {
-      foreignKey: 'employee_id',
+      foreignKey: 'employeeId', // Changed to match the attribute name
       as: 'author',
     });
   }
@@ -35,7 +35,7 @@ Announcement.init(
       type: DataTypes.TEXT,
       allowNull: false,
     },
-    employId: {
+    employeeId: {
       type: DataTypes.INTEGER,
       allowNull: false,
       references: {

@@ -50,7 +50,7 @@ class App {
     this.app.use('/api', goalRouters);
 
     this.app.use('/api', authRouters);
-    this.app.use('/attendence', attendenceRouters);
+    this.app.use('/api', attendenceRouters);
     this.app.use('/api', companyRouters);
 
     // Define a POST route for file uploads using Multer middleware

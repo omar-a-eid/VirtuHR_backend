@@ -75,7 +75,7 @@ export default class AuthController {
 
       const token = jwt.sign(
         {
-          userId: newEmployee.id,
+          employeeId: newEmployee.id,
           companyId: newCompany.id,
           userRole: newEmployee.role,
         },
@@ -118,7 +118,7 @@ export default class AuthController {
 
       const token = jwt.sign(
         {
-          userId: employee.id,
+          employeeId: employee.id,
           companyId: employee.companyId,
           userRole: employee.role,
         },

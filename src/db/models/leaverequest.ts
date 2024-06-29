@@ -38,16 +38,17 @@ LeaveRequest.init(
       onDelete: 'CASCADE',
     },
     startTime: {
-      type: DataTypes.TIME,
+      type: DataTypes.DATE,
       allowNull: false,
     },
     endTime: {
-      type: DataTypes.TIME,
+      type: DataTypes.DATE,
       allowNull: false,
     },
     status: {
       type: DataTypes.ENUM('rejected', 'accepted', 'pending'),
       allowNull: false,
+      defaultValue: 'pending',
       validate: {
         isIn: [['rejected', 'accepted', 'pending']],
       },

@@ -6,6 +6,7 @@ class LeaveRequestController {
   
   async create(req: Request, res: Response): Promise<Response> {
     try {
+      console.log('this is request body',req.body);
       const leaveRequest = await LeaveRequestService.createLeaveRequest(req.body);
       return res.status(201).json(leaveRequest);
     } catch (error) {

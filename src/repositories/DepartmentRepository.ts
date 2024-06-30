@@ -1,4 +1,5 @@
 import Department from '../db/models/department';
+import Employee from '../db/models/employee';
 
 class DepartmentRepository {
   async getAll() {
@@ -31,6 +32,12 @@ class DepartmentRepository {
       throw new Error('Department not found');
     }
     return await department.destroy();
+  }
+
+  async getAllEmployees(id: number) {
+    return await Department.findByPk(id, {
+      include: [{ model: Employee, as: 'departmentEmployees' }],
+    });
   }
 }
 

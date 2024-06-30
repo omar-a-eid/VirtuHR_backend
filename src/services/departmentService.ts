@@ -24,6 +24,10 @@ class DepartmentService {
   async deleteDepartment(id: number) {
     return await DepartmentRepository.delete(id);
   }
+
+  async getEmployeesOfDepartment(id: number) {
+    return await DepartmentRepository.getAllEmployees(id);
+  }
 }
 
 export default new DepartmentService();

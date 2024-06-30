@@ -8,7 +8,7 @@ const database_1 = __importDefault(require("../../config/database"));
 class Termination extends sequelize_1.Model {
     static associate(models) {
         this.belongsTo(models.Employee, {
-            foreignKey: 'employee_id',
+            foreignKey: 'employeeId',
             onDelete: 'CASCADE',
         });
     }

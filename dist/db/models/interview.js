@@ -8,11 +8,11 @@ const database_1 = __importDefault(require("../../config/database"));
 class Interview extends sequelize_1.Model {
     static associate(models) {
         this.belongsTo(models.Applicant, {
-            foreignKey: 'applicant_id',
+            foreignKey: 'applicantId',
             onDelete: 'CASCADE',
         });
         this.belongsTo(models.Employee, {
-            foreignKey: 'hiring_manager_id',
+            foreignKey: 'hiringManagerId',
             onDelete: 'SET NULL',
         });
     }

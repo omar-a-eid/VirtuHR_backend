@@ -6,26 +6,22 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const sequelize_1 = require("sequelize");
 const database_1 = __importDefault(require("../../config/database"));
 class Employee extends sequelize_1.Model {
-    // Custom method to get full name
     getFullName() {
         return `${this.firstName} ${this.lastName}`;
     }
-    // Association methods will be added here
-    // Will create the foreign key automcatically.
-    // Use the allias to access the data
     static associate(models) {
         this.belongsTo(models.Department, {
-            foreignKey: 'department_id',
-            as: 'department',
+            foreignKey: 'departmentId',
+            as: 'departmentEmployees',
             onDelete: 'SET NULL',
         });
         this.belongsTo(models.Employee, {
-            foreignKey: 'manager_id',
+            foreignKey: 'managerId',
             as: 'manager',
             onDelete: 'SET NULL',
         });
         this.belongsTo(models.DaysOff, {
-            foreignKey: 'days_off_id',
+            foreignKey: 'daysOffId',
             as: 'daysOff',
             onDelete: 'SET NULL',
         });
@@ -34,9 +30,25 @@ class Employee extends sequelize_1.Model {
         });
         this.belongsToMany(models.Cycle, { through: 'employees_cycles' });
         this.belongsToMany(models.Goal, { through: 'employees_goals' });
-        this.hasOne(models.Department);
-        this.hasOne(models.Termination);
-        this.hasMany(models.Employee);
+        this.belongsTo(models.DaysOff, {
+            foreignKey: 'companyId',
+            as: 'company',
+            onDelete: 'SET NULL',
+        });
+        this.hasOne(models.Department, {
+            foreignKey: 'managerId',
+            as: 'managedDepartment',
+            onDelete: 'SET NULL',
+        });
+        this.hasOne(models.Termination, {
+            foreignKey: 'employeeId',
+            onDelete: 'CASCADE',
+        });
+        this.hasMany(models.Employee, {
+            foreignKey: 'managerId',
+            as: 'subordinate',
+            onDelete: 'SET NULL',
+        });
         this.hasMany(models.Announcement);
         this.hasMany(models.Assessment);
         this.hasMany(models.Attendance);
@@ -44,8 +56,10 @@ class Employee extends sequelize_1.Model {
         this.hasMany(models.Goal);
         this.hasMany(models.Comment);
         this.hasMany(models.FeedbackAnswer);
-        this.hasMany(models.FeedbackAnswer);
-        this.hasMany(models.JobPosting);
+        this.hasMany(models.JobPosting, {
+            foreignKey: 'hiringLeadId',
+            onDelete: 'SET NULL',
+        });
         this.hasMany(models.LeaveRequest);
     }
 }
@@ -58,30 +72,63 @@ Employee.init({
     firstName: {
         type: sequelize_1.DataTypes.STRING(100),
         allowNull: false,
+        validate: {
+            notEmpty: {
+                msg: 'First name is required',
+            },
+            len: {
+                args: [4, 30],
+                msg: 'First name must be between 4 and 30 characters',
+            },
+        },
     },
     lastName: {
         type: sequelize_1.DataTypes.STRING(100),
         allowNull: false,
+        validate: {
+            notEmpty: {
+                msg: 'Last name is required',
+            },
+            len: {
+                args: [4, 30],
+                msg: 'Last name must be between 4 and 30 characters',
+            },
+        },
     },
     email: {
         type: sequelize_1.DataTypes.STRING(255),
         allowNull: false,
         unique: true,
+        validate: {
+            isEmail: {
+                msg: 'Must be a valid email address',
+            },
+        },
     },
     image: {
         type: sequelize_1.DataTypes.STRING(255),
+        allowNull: true,
     },
-    passowrd: {
+    password: {
         type: sequelize_1.DataTypes.STRING,
+        allowNull: false,
     },
     phone: {
         type: sequelize_1.DataTypes.STRING(50),
+        validate: {
+            is: {
+                args: /^[\d\-+\s]+$/,
+                msg: 'Phone number must be valid',
+            },
+        },
+        allowNull: true,
     },
     position: {
         type: sequelize_1.DataTypes.STRING(100),
-        allowNull: false,
+        allowNull: true,
     },
     departmentId: {
+        allowNull: true,
         type: sequelize_1.DataTypes.INTEGER,
         references: {
             model: 'departments',
@@ -90,10 +137,13 @@ Employee.init({
         onDelete: 'SET NULL',
     },
     salary: {
+        allowNull: true,
         type: sequelize_1.DataTypes.INTEGER,
-        allowNull: false,
         validate: {
-            min: 0,
+            min: {
+                args: [0],
+                msg: 'Salary must be greater than or equal to zero',
+            },
         },
     },
     createdAt: sequelize_1.DataTypes.DATE,
@@ -101,13 +151,17 @@ Employee.init({
     deletedAt: sequelize_1.DataTypes.DATE,
     gender: {
         type: sequelize_1.DataTypes.ENUM('M', 'F'),
-        allowNull: false,
+        allowNull: true,
         validate: {
-            isIn: [['M', 'F']],
+            isIn: {
+                args: [['M', 'F']],
+                msg: 'Gender must be either M or F',
+            },
         },
     },
     hireDate: {
         type: sequelize_1.DataTypes.DATE,
+        defaultValue: Date.now(),
     },
     managerId: {
         type: sequelize_1.DataTypes.INTEGER,
@@ -116,9 +170,11 @@ Employee.init({
             key: 'id',
         },
         onDelete: 'SET NULL',
+        allowNull: true,
     },
     location: {
         type: sequelize_1.DataTypes.STRING(255),
+        allowNull: true,
     },
     daysOffId: {
         type: sequelize_1.DataTypes.INTEGER,
@@ -126,21 +182,49 @@ Employee.init({
             model: 'days_off',
             key: 'id',
         },
+        allowNull: true,
         onDelete: 'SET NULL',
     },
     employmentType: {
-        type: sequelize_1.DataTypes.STRING(20),
+        type: sequelize_1.DataTypes.ENUM('full time', 'part time', 'freelance', 'internship'),
         allowNull: false,
         defaultValue: 'full time',
         validate: {
-            isIn: [['full time', 'part time', 'freelance', 'internship']],
+            isIn: {
+                args: [['full time', 'part time', 'freelance', 'internship']],
+                msg: 'Employment type must be one of full time, part time, freelance, or internship',
+            },
         },
+    },
+    companyId: {
+        type: sequelize_1.DataTypes.INTEGER,
+        references: {
+            model: 'companies',
+            key: 'id',
+        },
+        onDelete: 'SET NULL',
+        allowNull: false,
+    },
+    role: {
+        type: sequelize_1.DataTypes.ENUM('admin', 'employee'),
+        allowNull: false,
+        defaultValue: 'employee',
+        validate: {
+            isIn: {
+                args: [['admin', 'employee']],
+                msg: 'Employment type must be one of admin or employee',
+            },
+        },
+    },
+    dateOfBirth: {
+        allowNull: true,
+        type: sequelize_1.DataTypes.DATE,
     },
 }, {
     sequelize: database_1.default,
     modelName: 'Employee',
     timestamps: true,
-    paranoid: true, // Enables soft deletes
+    paranoid: true,
     underscored: true,
 });
 exports.default = Employee;

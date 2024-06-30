@@ -3,84 +3,115 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteJobPosting = exports.updateJobPosting = exports.createJobPosting = exports.getJobPostingById = exports.getAllJobPostings = void 0;
 const jobPostingService_1 = __importDefault(require("../services/jobPostingService"));
-// Get all job postings
-const getAllJobPostings = async (req, res) => {
-    try {
-        const jobPostings = await jobPostingService_1.default.getAllJobPostings();
-        return res.json(jobPostings);
-    }
-    catch (error) {
-        console.error('Error fetching all job postings:', error);
-        return res.status(500).json({ error: 'Internal Server Error' });
-    }
-};
-exports.getAllJobPostings = getAllJobPostings;
-// Get job posting by ID
-const getJobPostingById = async (req, res) => {
-    const jobPostingId = parseInt(req.params.id);
-    if (isNaN(jobPostingId)) {
-        return res.status(400).json({ error: 'ID entered is not a number' });
-    }
-    try {
-        const jobPosting = await jobPostingService_1.default.getJobPostingById(jobPostingId);
-        if (jobPosting) {
-            return res.json(jobPosting);
+const jobPostingSchema_1 = __importDefault(require("./jobPostingSchema"));
+const JobPostingRepository_1 = __importDefault(require("../repositories/JobPostingRepository"));
+const jobPostingRepository = new JobPostingRepository_1.default();
+const jobPostingService = new jobPostingService_1.default(jobPostingRepository);
+class jobPostingController {
+    // Get all job postings
+    static async getAllJobPostings(req, res) {
+        try {
+            const jobPostings = await jobPostingService.getAll();
+            if (jobPostings.length > 0) {
+                // console.log(jobPostings);
+                res.json(jobPostings);
+            }
+            else {
+                res.status(404).json({ message: 'No JobPostings Found' });
+            }
         }
-        else {
-            return res
-                .status(404)
-                .json({ message: `Job posting ${jobPostingId} not found` });
+        catch (error) {
+            console.log('Error fetching all jobPostings', error);
+            res.status(500).json({ error: 'Internal Server Error' });
         }
     }
-    catch (error) {
-        console.error(`Error fetching job posting with ID ${jobPostingId}:`, error);
-        return res.status(500).json({ error: 'Internal Server Error' });
+    // Get job posting by ID
+    static async getJobPostingById(req, res) {
+        const jobPostingId = parseInt(req.params.id, 10);
+        if (isNaN(jobPostingId)) {
+            res.status(400).json({ error: 'ID entered is not a number' });
+        }
+        try {
+            const jobPosting = await jobPostingService.getById(jobPostingId);
+            if (jobPosting) {
+                res.json(jobPosting);
+            }
+            else {
+                res
+                    .status(404)
+                    .json({ message: `Job posting with ID ${jobPostingId} not found` });
+            }
+        }
+        catch (error) {
+            console.error(`Error fetching job posting with ID ${jobPostingId}:`, error);
+            res.status(500).json({ error: 'Internal Server Error' });
+        }
     }
-};
-exports.getJobPostingById = getJobPostingById;
-// Create a new job posting
-const createJobPosting = async (req, res) => {
-    try {
-        const newJobPosting = await jobPostingService_1.default.addJobPosting(req.body);
-        return res.status(201).json(newJobPosting);
+    // Create a new job posting
+    static async createJobPosting(req, res) {
+        try {
+            const { error, value } = jobPostingSchema_1.default.validate(req.body, {
+                abortEarly: false,
+            });
+            if (error) {
+                res.status(400).json({ errors: error.details });
+            }
+            // Extract hiringLeadId from validated data
+            const { hiringLeadId, ...validatedData } = value;
+            const newJobPosting = await jobPostingService.create({
+                ...validatedData,
+                hiringLeadId, // Ensure hiringLeadId is included
+            });
+            if (newJobPosting) {
+                res.status(201).json(newJobPosting);
+            }
+            else {
+                res.status(500).json({ error: 'Failed to create new jobPosting' });
+            }
+        }
+        catch (error) {
+            console.error('Error creating job posting:', error);
+            res.status(500).json({ error: 'Internal Server Error' });
+        }
     }
-    catch (error) {
-        console.error('Error creating job posting:', error);
-        return res.status(500).json({ error: 'Internal Server Error' });
+    // Update an existing job posting
+    static async updateJobPosting(req, res) {
+        const jobPostingId = parseInt(req.params.id);
+        if (isNaN(jobPostingId)) {
+            res.status(400).json({ error: 'ID entered is not a number' });
+        }
+        const { error, value } = jobPostingSchema_1.default.validate(req.body, {
+            abortEarly: false,
+        });
+        if (error) {
+            res.status(400).json({ errors: error.details });
+        }
+        try {
+            await jobPostingService.update(jobPostingId, value);
+            res.status(200).json({ message: 'Job posting updated successfully' });
+        }
+        catch (error) {
+            console.error(`Error updating job posting with ID ${jobPostingId}:`, error);
+            res.status(500).json({ error: 'Internal Server Error' });
+        }
     }
-};
-exports.createJobPosting = createJobPosting;
-// Update an existing job posting
-const updateJobPosting = async (req, res) => {
-    const jobPostingId = parseInt(req.params.id);
-    if (isNaN(jobPostingId)) {
-        return res.status(400).json({ error: 'ID entered is not a number' });
+    // Delete a job posting
+    static async deleteJobPosting(req, res) {
+        const jobPostingId = parseInt(req.params.id);
+        if (isNaN(jobPostingId)) {
+            res.status(400).json({ error: 'ID entered is not a number' });
+        }
+        try {
+            await jobPostingService.delete(jobPostingId);
+            res.status(200).json({
+                message: `Job posting with ID ${jobPostingId} deleted successfully`,
+            });
+        }
+        catch (error) {
+            console.error(`Error deleting job posting with ID ${jobPostingId}:`, error);
+            res.status(500).json({ error: 'Internal Server Error' });
+        }
     }
-    try {
-        await jobPostingService_1.default.updateJobPosting(jobPostingId, req.body);
-        return res.status(204).send();
-    }
-    catch (error) {
-        console.error(`Error updating job posting with ID ${jobPostingId}:`, error);
-        return res.status(500).json({ error: 'Internal Server Error' });
-    }
-};
-exports.updateJobPosting = updateJobPosting;
-// Delete a job posting
-const deleteJobPosting = async (req, res) => {
-    const jobPostingId = parseInt(req.params.id);
-    if (isNaN(jobPostingId)) {
-        return res.status(400).json({ error: 'ID entered is not a number' });
-    }
-    try {
-        await jobPostingService_1.default.deleteJobPosting(jobPostingId);
-        return res.status(204).send();
-    }
-    catch (error) {
-        console.error(`Error deleting job posting with ID ${jobPostingId}:`, error);
-        return res.status(500).json({ error: 'Internal Server Error' });
-    }
-};
-exports.deleteJobPosting = deleteJobPosting;
+}
+exports.default = jobPostingController;

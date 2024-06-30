@@ -8,14 +8,17 @@ const database_1 = __importDefault(require("../../config/database"));
 class JobPosting extends sequelize_1.Model {
     static associate(models) {
         this.belongsTo(models.Employee, {
-            foreignKey: 'hiring_lead_id',
+            foreignKey: 'hiringLeadId',
             onDelete: 'SET NULL',
         });
         this.belongsTo(models.Department, {
-            foreignKey: 'department_id',
+            foreignKey: 'departmentId',
             onDelete: 'SET NULL',
         });
-        this.hasMany(models.Applicant);
+        this.hasMany(models.Applicant, {
+            foreignKey: 'jobId',
+            onDelete: 'CASCADE',
+        });
     }
 }
 JobPosting.init({
@@ -31,22 +34,6 @@ JobPosting.init({
     jobStatus: {
         type: sequelize_1.DataTypes.ENUM('archived', 'active'),
     },
-<<<<<<< HEAD
-    // hiringLeadId: {
-    //   type: DataTypes.INTEGER,
-    //   references: {
-    //     model: 'employees',
-    //     key: 'id',
-    //   },
-    // },
-    // departmentId: {
-    //   type: DataTypes.INTEGER,
-    //   references: {
-    //     model: 'departments',
-    //     key: 'id',
-    //   },
-    // },
-=======
     hiringLeadId: {
         type: sequelize_1.DataTypes.INTEGER,
         references: {
@@ -61,21 +48,21 @@ JobPosting.init({
             key: 'id',
         },
     },
->>>>>>> Employee
     employmentType: {
         type: sequelize_1.DataTypes.ENUM('full time', 'part time', 'freelance', 'internship'),
     },
     minimumExperience: {
-        type: sequelize_1.DataTypes.INTEGER,
+        type: sequelize_1.DataTypes.STRING,
     },
     compensation: {
         type: sequelize_1.DataTypes.INTEGER,
     },
     description: {
-        type: sequelize_1.DataTypes.JSON,
+        type: sequelize_1.DataTypes.STRING,
     },
     location: {
         type: sequelize_1.DataTypes.STRING,
+        allowNull: true,
     },
     createdAt: sequelize_1.DataTypes.DATE,
     updatedAt: sequelize_1.DataTypes.DATE,

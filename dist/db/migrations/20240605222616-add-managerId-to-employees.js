@@ -4,15 +4,17 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const sequelize_1 = require("sequelize");
 exports.default = {
     up: async (queryInterface) => {
-        await queryInterface.addColumn('departments', 'managerId', {
+        await queryInterface.addColumn('departments', 'manager_id', {
             type: sequelize_1.DataTypes.INTEGER,
             references: {
                 model: 'employees',
                 key: 'id',
             },
+            onUpdate: 'CASCADE',
+            onDelete: 'SET NULL',
         });
     },
     down: async (queryInterface) => {
-        await queryInterface.removeColumn('departments', 'managerId');
+        await queryInterface.removeColumn('departments', 'manager_id');
     },
 };

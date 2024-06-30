@@ -8,7 +8,7 @@ const database_1 = __importDefault(require("../../config/database"));
 class Applicant extends sequelize_1.Model {
     static associate(models) {
         this.belongsTo(models.JobPosting, {
-            foreignKey: 'job_id',
+            foreignKey: 'jobId',
             onDelete: 'CASCADE',
         });
         this.hasOne(models.Interview);
@@ -69,10 +69,12 @@ Applicant.init({
     },
     createdAt: sequelize_1.DataTypes.DATE,
     updatedAt: sequelize_1.DataTypes.DATE,
+    deletedAt: sequelize_1.DataTypes.DATE,
 }, {
     sequelize: database_1.default,
     modelName: 'Applicant',
     timestamps: true,
     underscored: true,
+    paranoid: true, // Enables soft delete functionality
 });
 exports.default = Applicant;

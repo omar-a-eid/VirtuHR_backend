@@ -24,16 +24,24 @@ exports.default = {
             },
             image: {
                 type: sequelize_1.DataTypes.STRING(255),
+                allowNull: true,
             },
-            passowrd: {
+            password: {
                 type: sequelize_1.DataTypes.STRING,
             },
             phone: {
                 type: sequelize_1.DataTypes.STRING(50),
+                validate: {
+                    is: {
+                        args: /^[\d\-+\s]+$/,
+                        msg: 'Phone number must be valid',
+                    },
+                },
+                allowNull: true,
             },
             position: {
                 type: sequelize_1.DataTypes.STRING(100),
-                allowNull: false,
+                allowNull: true,
             },
             department_id: {
                 type: sequelize_1.DataTypes.INTEGER,
@@ -45,7 +53,7 @@ exports.default = {
             },
             salary: {
                 type: sequelize_1.DataTypes.INTEGER,
-                allowNull: false,
+                allowNull: true,
                 validate: {
                     min: 0,
                 },
@@ -55,13 +63,14 @@ exports.default = {
             deleted_at: sequelize_1.DataTypes.DATE,
             gender: {
                 type: sequelize_1.DataTypes.ENUM('M', 'F'),
-                allowNull: false,
+                allowNull: true,
                 validate: {
                     isIn: [['M', 'F']],
                 },
             },
             hire_date: {
                 type: sequelize_1.DataTypes.DATE,
+                defaultValue: Date.now(),
             },
             manager_id: {
                 type: sequelize_1.DataTypes.INTEGER,
@@ -70,9 +79,11 @@ exports.default = {
                     key: 'id',
                 },
                 onDelete: 'SET NULL',
+                allowNull: true,
             },
             location: {
                 type: sequelize_1.DataTypes.STRING(255),
+                allowNull: true,
             },
             days_off_id: {
                 type: sequelize_1.DataTypes.INTEGER,
@@ -81,6 +92,7 @@ exports.default = {
                     key: 'id',
                 },
                 onDelete: 'SET NULL',
+                allowNull: true,
             },
             employment_type: {
                 type: sequelize_1.DataTypes.STRING(20),
@@ -88,6 +100,26 @@ exports.default = {
                 defaultValue: 'full time',
                 validate: {
                     isIn: [['full time', 'part time', 'freelance', 'internship']],
+                },
+            },
+            company_id: {
+                type: sequelize_1.DataTypes.INTEGER,
+                references: {
+                    model: 'companies',
+                    key: 'id',
+                },
+                onDelete: 'SET NULL',
+                allowNull: false,
+            },
+            role: {
+                type: sequelize_1.DataTypes.ENUM('admin', 'employee'),
+                allowNull: false,
+                defaultValue: 'employee',
+                validate: {
+                    isIn: {
+                        args: [['admin', 'employee']],
+                        msg: 'Employment type must be one of admin or employee',
+                    },
                 },
             },
         });

@@ -26,29 +26,39 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const fs_1 = require("fs");
+const promises_1 = require("fs/promises");
 const path_1 = require("path");
 const sequelize_1 = require("sequelize");
 const database_1 = __importDefault(require("../../config/database"));
 const basename = (0, path_1.basename)(__filename);
 const db = {};
-(0, fs_1.readdirSync)(__dirname)
-    .filter((file) => {
-    return (file.indexOf('.') !== 0 &&
-        file !== basename &&
-        file.slice(-3) === '.ts' &&
-        file.indexOf('.test.ts') === -1);
-})
-    .forEach(async (file) => {
-    const model = await Promise.resolve(`${(0, path_1.join)(__dirname, file)}`).then(s => __importStar(require(s)));
-    const initializedModel = model.default(database_1.default, sequelize_1.DataTypes);
-    db[initializedModel.name] = initializedModel;
-});
-Object.keys(db).forEach((modelName) => {
-    if (db[modelName].associate) {
-        db[modelName].associate(db);
+async function initializeModels() {
+    try {
+        const files = await (0, promises_1.readdir)(__dirname);
+        for (const file of files) {
+            if (file.indexOf('.') !== 0 &&
+                file !== basename &&
+                file.slice(-3) === '.ts' &&
+                file.indexOf('.test.ts') === -1) {
+                const modelImport = await Promise.resolve(`${(0, path_1.join)(__dirname, file)}`).then(s => __importStar(require(s)));
+                const model = modelImport.default;
+                if (typeof model === 'function' && model.prototype instanceof sequelize_1.Model) {
+                    db[model.name] = model;
+                }
+            }
+        }
+        Object.keys(db).forEach((modelName) => {
+            if (db[modelName].associate) {
+                db[modelName].associate(db);
+            }
+        });
+        db.sequelize = database_1.default;
+        db.Sequelize = sequelize_1.Sequelize;
+        console.log('Models initialized and associations set up.');
     }
-});
-db.sequelize = database_1.default;
-db.Sequelize = sequelize_1.Sequelize;
+    catch (error) {
+        console.error('Error initializing models:', error);
+    }
+}
+initializeModels();
 exports.default = db;

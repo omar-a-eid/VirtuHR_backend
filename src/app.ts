@@ -11,6 +11,7 @@ import authRouters from './routes/authRouters';
 import cycleRouters from './routes/cycleRouters';
 import departmentRouters from './routes/departmentRouters';
 import employeeRouters from './routes/employeeRouters';
+import feedbackAnswerRouters from './routes/feedbackAnswerRouter';
 import feedbackRouters from './routes/feedbackRouters';
 import goalRouters from './routes/goalRouters';
 import jobPostingRouters from './routes/jobPostingRouters';
@@ -59,6 +60,7 @@ class App {
     this.app.use('/api', assessmentRouters);
     this.app.use('/api', cycleRouters);
     this.app.use('/api', assessmentAnswerRouters);
+    this.app.use('/api', feedbackAnswerRouters);
 
     // Define a POST route for file uploads using Multer middleware
     this.app.post(

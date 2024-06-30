@@ -56,7 +56,6 @@ Announcement.init(
     sequelize,
     modelName: 'Announcement',
     timestamps: true,
-    paranoid: true,
     underscored: true,
   },
 );

@@ -1,15 +1,28 @@
 import { DataTypes, Model } from 'sequelize';
 import sequelize from '../../config/database';
+
 class AssessmentAnswer extends Model {
   declare id: number;
   declare assessmentId: number;
-  declare answerText: JSON;
+  declare answers: JSON;
+  declare employeeId: number;
+  declare recipientId: number;
   declare createdAt: Date;
   declare updatedAt: Date;
-  // the employeeId will be handled depending on the assessment type  (slef/manager)
+
   static associate(models: any) {
     this.belongsTo(models.Assessment, {
-      foreignKey: 'assessment_id',
+      foreignKey: 'assessmentId',
+      onDelete: 'CASCADE',
+    });
+    this.belongsTo(models.Employee, {
+      as: 'employee',
+      foreignKey: 'employeeId',
+      onDelete: 'CASCADE',
+    });
+    this.belongsTo(models.Employee, {
+      as: 'recipient',
+      foreignKey: 'recipientId',
       onDelete: 'CASCADE',
     });
   }
@@ -31,12 +44,38 @@ AssessmentAnswer.init(
       allowNull: false,
       onDelete: 'CASCADE',
     },
-    answerText: {
+    answers: {
       type: DataTypes.JSON,
       allowNull: false,
     },
-    createdAt: DataTypes.DATE,
-    updatedAt: DataTypes.DATE,
+    employeeId: {
+      type: DataTypes.INTEGER,
+      references: {
+        model: 'employees',
+        key: 'id',
+      },
+      allowNull: false,
+      onDelete: 'CASCADE',
+    },
+    recipientId: {
+      type: DataTypes.INTEGER,
+      references: {
+        model: 'employees',
+        key: 'id',
+      },
+      allowNull: false,
+      onDelete: 'CASCADE',
+    },
+    createdAt: {
+      type: DataTypes.DATE,
+      allowNull: false,
+      defaultValue: DataTypes.NOW,
+    },
+    updatedAt: {
+      type: DataTypes.DATE,
+      allowNull: false,
+      defaultValue: DataTypes.NOW,
+    },
   },
   {
     sequelize,

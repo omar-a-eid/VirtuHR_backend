@@ -4,17 +4,30 @@ import sequelize from '../../config/database';
 class Cycle extends Model {
   declare id: number;
   declare name: string;
-  declare startDate: Date;
-  declare cycleType: 'interval' | 'start_date';
-  declare period: string;
+  declare startDate?: Date;
+  declare cycleType: 'fixed' | 'schedule';
+  declare companyId: number;
   declare includeAll: boolean;
+  declare active: boolean;
   declare createdAt: Date;
   declare updatedAt: Date;
 
   static associate(models: any) {
-    this.belongsToMany(models.Employee, { through: 'employees_cycles' });
-    this.hasOne(models.Feedback);
-    this.hasOne(models.Assessment);
+    this.belongsTo(models.Company, {
+      foreignKey: 'companyId',
+      as: 'cycles',
+      onDelete: 'CASCADE',
+    });
+
+    // this.belongsToMany(models.Employee, { through: 'employees_cycles' });
+    this.hasMany(models.Feedback, {
+      foreignKey: 'cycleId',
+      onDelete: 'CASCADE',
+    });
+    this.hasOne(models.Assessment, {
+      foreignKey: 'cycleId',
+      onDelete: 'CASCADE',
+    });
   }
 }
 
@@ -31,17 +44,29 @@ Cycle.init(
     },
     startDate: {
       type: DataTypes.DATE,
+      allowNull: true,
     },
-    period: {
-      type: DataTypes.STRING,
-    },
-    cycle_type: {
-      type: DataTypes.ENUM('interval', 'start_date'),
+    cycleType: {
+      type: DataTypes.ENUM('fixed', 'schedule'),
       validate: {
-        isIn: [['interval', 'start_date']],
+        isIn: [['fixed', 'schedule']],
       },
     },
+    companyId: {
+      type: DataTypes.INTEGER,
+      references: {
+        model: 'companies',
+        key: 'id',
+      },
+      onDelete: 'CASCADE',
+      allowNull: false,
+    },
     includeAll: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: true,
+      allowNull: false,
+    },
+    active: {
       type: DataTypes.BOOLEAN,
       defaultValue: true,
       allowNull: false,

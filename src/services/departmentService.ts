@@ -1,17 +1,29 @@
-import Department from '../db/models/department';
 import DepartmentRepository from '../repositories/DepartmentRepository';
-import BaseService from './baseService';
 
-export default class DepartmentService extends BaseService<Department> {
-  private departmentRepository: DepartmentRepository;
-
-  constructor(departmentRepository: DepartmentRepository) {
-    super(Department);
-    this.departmentRepository = departmentRepository;
+class DepartmentService {
+  async getAllDepartments() {
+    return await DepartmentRepository.getAll();
   }
 
-  // Add any additional methods specific to DepartmentService if needed
-  async getById(id: number) {
-    return await this.departmentRepository.getByIdAll(id);
+  async getDepartmentById(id: number) {
+    return await DepartmentRepository.getById(id);
+  }
+
+  async createDepartment(departmentData: any) {
+    return await DepartmentRepository.create(departmentData);
+  }
+
+  async createDepartments(departmentsData: any[]) {
+    return await DepartmentRepository.createMany(departmentsData);
+  }
+
+  async updateDepartment(id: number, updateData: any) {
+    return await DepartmentRepository.update(id, updateData);
+  }
+
+  async deleteDepartment(id: number) {
+    return await DepartmentRepository.delete(id);
   }
 }
+
+export default new DepartmentService();

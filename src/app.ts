@@ -2,18 +2,26 @@ import bodyParser from 'body-parser';
 import cors from 'cors';
 import 'dotenv/config';
 import express, { Application, Request, Response } from 'express';
-import jobPostingRouters from './routes/jobPostingRouters';
-import applicantRouters from './routes/applicantRouters';
 import './db/models/index';
 import attendenceRouters from './routes/AttendenceRouters';
+import applicantRouters from './routes/applicantRouters';
+import assessmentAnswerRouters from './routes/assessmentAnswerRouters';
+import assessmentRouters from './routes/assessmentRouters';
 import authRouters from './routes/authRouters';
+import cycleRouters from './routes/cycleRouters';
 import departmentRouters from './routes/departmentRouters';
 import employeeRouters from './routes/employeeRouters';
+import feedbackAnswerRouters from './routes/feedbackAnswerRouter';
+import feedbackRouters from './routes/feedbackRouters';
+import goalRouters from './routes/goalRouters';
+import jobPostingRouters from './routes/jobPostingRouters';
 import leaveRequestRouters from './routes/leaveRequestRouters';
 import reportRouter from './routes/reportRouters';
 import terminationRouters from './routes/terminationRouters';
-import multer from 'multer';
 
+import multer from 'multer';
+import announcementRouter from './routes/announcementRouter';
+import companyRouters from './routes/companyRouters';
 // Create a Multer instance with a destination folder for file uploads
 const upload = multer({ dest: 'uploads/' });
 
@@ -43,9 +51,16 @@ class App {
     this.app.use('/api', terminationRouters);
     this.app.use('/api', leaveRequestRouters);
     this.app.use('/api', reportRouter);
-
+    this.app.use('/api', announcementRouter);
+    this.app.use('/api', goalRouters);
     this.app.use('/api', authRouters);
-    this.app.use('/attendence', attendenceRouters);
+    this.app.use('/api', attendenceRouters);
+    this.app.use('/api', companyRouters);
+    this.app.use('/api', feedbackRouters);
+    this.app.use('/api', assessmentRouters);
+    this.app.use('/api', cycleRouters);
+    this.app.use('/api', assessmentAnswerRouters);
+    this.app.use('/api', feedbackAnswerRouters);
 
     // Define a POST route for file uploads using Multer middleware
     this.app.post(

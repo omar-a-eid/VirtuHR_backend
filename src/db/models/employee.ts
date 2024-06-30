@@ -53,12 +53,12 @@ class Employee extends Model {
       through: 'announcements_send_to',
     });
     this.belongsToMany(models.Cycle, { through: 'employees_cycles' });
-    this.belongsToMany(models.Goal, { through: 'employees_goals' });
+    // this.belongsToMany(models.Goal, { through: 'employees_goals' });
 
-    this.belongsTo(models.DaysOff, {
+    this.belongsTo(models.Company, {
       foreignKey: 'companyId',
       as: 'company',
-      onDelete: 'SET NULL',
+      onDelete: 'CASCADE',
     });
 
     this.hasOne(models.Department, {
@@ -77,10 +77,13 @@ class Employee extends Model {
       onDelete: 'SET NULL',
     });
     this.hasMany(models.Announcement);
-    this.hasMany(models.Assessment);
+    // this.hasMany(models.Assessment);
     this.hasMany(models.Attendance);
-    this.hasMany(models.Feedback);
-    this.hasMany(models.Goal);
+    // this.hasMany(models.Feedback);
+    this.hasMany(models.Goal, {
+      foreignKey: 'assignedTo',
+      onDelete: 'SET NULL',
+    });
     this.hasMany(models.Comment);
     this.hasMany(models.FeedbackAnswer);
     this.hasMany(models.JobPosting, {
@@ -106,7 +109,7 @@ Employee.init(
           msg: 'First name is required',
         },
         len: {
-          args: [4, 30],
+          args: [3, 30],
           msg: 'First name must be between 4 and 30 characters',
         },
       },
@@ -119,7 +122,7 @@ Employee.init(
           msg: 'Last name is required',
         },
         len: {
-          args: [4, 30],
+          args: [3, 30],
           msg: 'Last name must be between 4 and 30 characters',
         },
       },
@@ -231,7 +234,7 @@ Employee.init(
         model: 'companies',
         key: 'id',
       },
-      onDelete: 'SET NULL',
+      onDelete: 'CASCADE',
       allowNull: false,
     },
     role: {

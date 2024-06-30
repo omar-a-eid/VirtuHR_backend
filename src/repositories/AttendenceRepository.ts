@@ -82,41 +82,6 @@ class AttendenceRepository implements IAttendenceRepository {
     return totalHours;
   }
 
-  // async getMonthlyHours(
-  //   employeeId: number,
-  //   year: number,
-  //   month: number,
-  // ): Promise<{ hours: number; salary: number }> {
-  //   const startOfMonth = new Date(year, month - 1, 1, 0, 0, 0, 0);
-  //   const endOfMonth = new Date(year, month, 0, 23, 59, 59, 999);
-
-  //   const attendances = await Attendance.findAll({
-  //     where: {
-  //       employeeId,
-  //       createdAt: {
-  //         [Op.between]: [startOfMonth, endOfMonth],
-  //       },
-  //       checkedOut: true,
-  //     },
-  //   });
-
-  //   const totalHours = attendances.reduce(
-  //     (sum, record) => sum + (record.hours || 0),
-  //     0,
-  //   );
-
-  //   // Fetch the employee's salary
-  //   const employee = await Employee.findByPk(employeeId);
-  //   if (!employee) {
-  //     throw new Error('Employee not found');
-  //   }
-
-  //   const salaryPerHour = employee.salary / (8 * 26);
-  //   const salary = totalHours * salaryPerHour;
-
-  //   return { hours: totalHours, salary };
-  // }
-
   async getMonthlyHours(
     employeeId: number,
     year: number,

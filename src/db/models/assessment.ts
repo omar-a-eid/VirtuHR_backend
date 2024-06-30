@@ -3,14 +3,16 @@ import sequelize from '../../config/database';
 class Assessment extends Model {
   declare id: number;
   declare cycleId: number;
-  declare questions: JSON;
-  declare questionType: 'self' | 'manager';
+  declare repeat: number;
+  declare managerQuestions: JSON;
+  declare slefQuestions: JSON;
+  declare startDate: Date;
   declare createdAt: Date;
   declare updatedAt: Date;
 
   static associate(models: any) {
     this.belongsTo(models.Cycle, {
-      foreignKey: 'cycle_id',
+      foreignKey: 'cycleId',
       onDelete: 'CASCADE',
     });
 
@@ -34,16 +36,21 @@ Assessment.init(
       allowNull: false,
       onDelete: 'CASCADE',
     },
-    questions: {
+    managerQuestions: {
       type: DataTypes.JSON,
       allowNull: false,
     },
-    questionType: {
-      type: DataTypes.ENUM('self', 'manager'),
+    selfQuestions: {
+      type: DataTypes.JSON,
       allowNull: false,
-      validate: {
-        isIn: [['self', 'manager']],
-      },
+    },
+    startDate: {
+      type: DataTypes.DATEONLY,
+      allowNull: false,
+    },
+    repeat: {
+      type: DataTypes.NUMBER,
+      allowNull: false,
     },
     createdAt: DataTypes.DATE,
     updatedAt: DataTypes.DATE,

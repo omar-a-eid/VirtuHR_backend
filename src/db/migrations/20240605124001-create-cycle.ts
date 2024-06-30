@@ -14,27 +14,47 @@ export default {
       },
       start_date: {
         type: DataTypes.DATE,
-      },
-      period: {
-        type: DataTypes.STRING,
+        allowNull: true,
       },
       cycle_type: {
-        type: DataTypes.ENUM('interval', 'start_date'),
+        type: DataTypes.ENUM('fixed', 'schedule'),
+        allowNull: false,
         validate: {
-          isIn: [['interval', 'start_date']],
+          isIn: [['fixed', 'schedule']],
         },
+      },
+      company_id: {
+        type: DataTypes.INTEGER,
+        references: {
+          model: 'companies',
+          key: 'id',
+        },
+        onDelete: 'CASCADE',
+        allowNull: false,
       },
       include_all: {
         type: DataTypes.BOOLEAN,
         defaultValue: true,
         allowNull: false,
       },
-      created_at: DataTypes.DATE,
-      updated_at: DataTypes.DATE,
+      active: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: true,
+        allowNull: false,
+      },
+      created_at: {
+        type: DataTypes.DATE,
+        allowNull: false,
+        defaultValue: DataTypes.NOW,
+      },
+      updated_at: {
+        type: DataTypes.DATE,
+        allowNull: false,
+        defaultValue: DataTypes.NOW,
+      },
     });
   },
   down: async (queryInterface: QueryInterface) => {
-    // Define how to revert the changes made in the `up` method
     await queryInterface.dropTable('cycles');
   },
 };

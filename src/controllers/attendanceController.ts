@@ -8,29 +8,6 @@ import EmployeeService from '../services/employeeService';
 const employeeService = new EmployeeService(new EmployeeRepository());
 
 /*----------------------------Checkin-------------------------*/
-
-// export const checkIn = async (req: Request, res: Response) => {
-//   const { employeeId } = req.body;
-//   try {
-//     if (!employeeId) {
-//       return res.status(400).json({ error: 'Employee ID is required' });
-//     }
-//     const employee = await EmployeeRepository.getById(employeeId);
-//     if (!employee) {
-//       return res
-//         .status(404)
-//         .json({ error: `Employee ID ${employeeId} Not found` });
-//     }
-//     await AttendanceRepository.checkIn(employeeId);
-//     return res
-//       .status(200)
-//       .json({ message: `Checked In successfully for ID: ${employeeId}` });
-//   } catch (error) {
-//     console.error(`Error while Checking in for ID ${employeeId}`, error);
-//     return res.status(500).json({ error: 'Internal Server Error!!' });
-//   }
-// };
-
 export const checkIn = async (req: Request, res: Response) => {
   const { employeeId } = req.body;
   try {
@@ -83,15 +60,18 @@ export const checkOut = async (req: Request, res: Response) => {
 /*----------------------------getDailyHours-------------------------*/
 export const getDailyHours = async (req: Request, res: Response) => {
   const { employeeId } = req.query;
-  const date = new Date(req.query.date as string);
+  const date = req.query.date ? new Date(req.query.date as string) : new Date();
+
   try {
     if (!employeeId) {
       return res.status(400).json({ error: 'Employee ID is required' });
     }
+
     const totalHours = await AttendanceRepository.getDailyHours(
       parseInt(employeeId as string),
       date,
     );
+
     return res.status(200).json({
       employeeId,
       date: date.toISOString().split('T')[0],
@@ -107,23 +87,43 @@ export const getDailyHours = async (req: Request, res: Response) => {
 };
 /*----------------------------getMonthlyHours-------------------------*/
 export const getMonthlyHours = async (req: Request, res: Response) => {
-  const { employeeId, year, month } = req.query;
+  const { employeeId, year, month, current } = req.query;
   try {
-    if (!employeeId || !year || !month) {
-      return res
-        .status(400)
-        .json({ error: 'Employee ID, year, and month are required' });
+    if (current) {
+      const now = new Date();
+      const currentYear = now.getFullYear();
+      const currentMonth = now.getMonth() + 1; // getMonth() returns 0-11
+
+      if (!employeeId) {
+        return res.status(400).json({ error: 'Employee ID is required' });
+      }
+      const employeeExists = await employeeService.getById(Number(employeeId));
+      if (!employeeExists) {
+        return res.status(404).json({ error: 'Employee not found' });
+      }
+      const { hours, salary } = await AttendanceRepository.getMonthlyHours(
+        Number(employeeId),
+        currentYear,
+        currentMonth,
+      );
+      return res.status(200).json({ hours, salary });
+    } else {
+      if (!employeeId || !year || !month) {
+        return res
+          .status(400)
+          .json({ error: 'Employee ID, year, and month are required' });
+      }
+      const employeeExists = await employeeService.getById(Number(employeeId));
+      if (!employeeExists) {
+        return res.status(404).json({ error: 'Employee not found' });
+      }
+      const { hours, salary } = await AttendanceRepository.getMonthlyHours(
+        Number(employeeId),
+        Number(year),
+        Number(month),
+      );
+      return res.status(200).json({ hours, salary });
     }
-    const employeeExists = await employeeService.getById(Number(employeeId));
-    if (!employeeExists) {
-      return res.status(404).json({ error: 'Employee not found' });
-    }
-    const { hours, salary } = await AttendanceRepository.getMonthlyHours(
-      Number(employeeId),
-      Number(year),
-      Number(month),
-    );
-    return res.status(200).json({ hours, salary });
   } catch (error) {
     console.error(
       `Error fetching monthly hours for employee ID: ${employeeId}`,

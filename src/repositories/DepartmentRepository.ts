@@ -1,19 +1,37 @@
 import Department from '../db/models/department';
-import Employee from '../db/models/employee';
-import BaseRepository from './BaseRepository';
 
-export default class DepartmentRepository extends BaseRepository<Department> {
-  constructor() {
-    super(Department);
+class DepartmentRepository {
+  async getAll() {
+    return await Department.findAll();
   }
 
-  // If you have additional methods specific to Department, you can add them here
-  public async getByIdAll(id: number) {
-    return await Department.findByPk(id, {
-      include: {
-        model: Employee,
-        as: 'departmentEmployees',
-      },
-    });
+  async getById(id: number) {
+    return await Department.findByPk(id);
+  }
+
+  async create(departmentData: any) {
+    return await Department.create(departmentData);
+  }
+
+  async createMany(departmentsData: any[]) {
+    return await Department.bulkCreate(departmentsData);
+  }
+
+  async update(id: number, updateData: any) {
+    const department = await this.getById(id);
+    if (!department) {
+      throw new Error('Department not found');
+    }
+    return await department.update(updateData);
+  }
+
+  async delete(id: number) {
+    const department = await this.getById(id);
+    if (!department) {
+      throw new Error('Department not found');
+    }
+    return await department.destroy();
   }
 }
+
+export default new DepartmentRepository();

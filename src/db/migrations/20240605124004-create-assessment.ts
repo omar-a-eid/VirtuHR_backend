@@ -17,23 +17,35 @@ export default {
         allowNull: false,
         onDelete: 'CASCADE',
       },
-      questions: {
+      manager_questions: {
         type: DataTypes.JSON,
         allowNull: false,
       },
-      question_type: {
-        type: DataTypes.ENUM('self', 'manager'),
+      self_questions: {
+        type: DataTypes.JSON,
         allowNull: false,
-        validate: {
-          isIn: [['self', 'manager']],
-        },
       },
-      created_at: DataTypes.DATE,
-      updated_at: DataTypes.DATE,
+      start_date: {
+        type: DataTypes.DATEONLY,
+        allowNull: false,
+      },
+      repeat: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+      },
+      created_at: {
+        type: DataTypes.DATE,
+        allowNull: false,
+        defaultValue: DataTypes.NOW,
+      },
+      updated_at: {
+        type: DataTypes.DATE,
+        allowNull: false,
+        defaultValue: DataTypes.NOW,
+      },
     });
   },
   down: async (queryInterface: QueryInterface) => {
-    // Define how to revert the changes made in the `up` method
     await queryInterface.dropTable('assessments');
   },
 };

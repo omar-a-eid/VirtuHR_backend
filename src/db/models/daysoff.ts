@@ -11,7 +11,11 @@ class DaysOff extends Model {
   declare updatedAt: Date;
 
   static associate(models: any) {
-    this.hasMany(models.Employee);
+    this.hasOne(models.Employee, {
+      foreignKey: 'daysOffId',
+      as: 'daysOff',
+      onDelete: 'SET NULL',
+    });
   }
 }
 
@@ -56,6 +60,7 @@ DaysOff.init(
   {
     sequelize,
     modelName: 'DaysOff',
+    tableName: 'days_off',
     timestamps: true,
     underscored: true,
   },

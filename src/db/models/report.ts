@@ -7,8 +7,6 @@ class Report extends Model {
   declare selectedFields: { label: string; value: string }[];
   declare createdAt: Date;
   declare updatedAt: Date;
-
-
 }
 
 Report.init(
@@ -43,8 +41,13 @@ Report.init(
             if (typeof field !== 'object' || field === null) {
               throw new Error('Each selected field must be an object');
             }
-            if (typeof field.label !== 'string' || typeof field.value !== 'string') {
-              throw new Error('Each selected field object must have a label and value of type string');
+            if (
+              typeof field.label !== 'string' ||
+              typeof field.value !== 'string'
+            ) {
+              throw new Error(
+                'Each selected field object must have a label and value of type string',
+              );
             }
           });
         },

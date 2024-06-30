@@ -101,7 +101,6 @@ export default class EmployeeRepository extends BaseRepository<Employee> {
         'createdAt',
         'gender',
         'managerId',
-        
       ],
     });
   }

@@ -5,9 +5,13 @@ import express, { Application, Request, Response } from 'express';
 import './db/models/index';
 import attendenceRouters from './routes/AttendenceRouters';
 import applicantRouters from './routes/applicantRouters';
+import assessmentAnswerRouters from './routes/assessmentAnswerRouters';
+import assessmentRouters from './routes/assessmentRouters';
 import authRouters from './routes/authRouters';
+import cycleRouters from './routes/cycleRouters';
 import departmentRouters from './routes/departmentRouters';
 import employeeRouters from './routes/employeeRouters';
+import feedbackRouters from './routes/feedbackRouters';
 import goalRouters from './routes/goalRouters';
 import jobPostingRouters from './routes/jobPostingRouters';
 import leaveRequestRouters from './routes/leaveRequestRouters';
@@ -48,10 +52,13 @@ class App {
     this.app.use('/api', reportRouter);
     this.app.use('/api', announcementRouter);
     this.app.use('/api', goalRouters);
-
     this.app.use('/api', authRouters);
     this.app.use('/api', attendenceRouters);
     this.app.use('/api', companyRouters);
+    this.app.use('/api', feedbackRouters);
+    this.app.use('/api', assessmentRouters);
+    this.app.use('/api', cycleRouters);
+    this.app.use('/api', assessmentAnswerRouters);
 
     // Define a POST route for file uploads using Multer middleware
     this.app.post(

@@ -6,12 +6,14 @@ class Feedback extends Model {
   declare cycleId: number;
   declare feedbackType: 'upward' | 'peer';
   declare questions: JSON;
+  declare reminder: Date;
+  declare repeat: number;
   declare createdAt: Date;
   declare updatedAt: Date;
 
   static associate(models: any) {
     this.belongsTo(models.Cycle, {
-      foreignKey: 'cycle_id',
+      foreignKey: 'cycleId',
       onDelete: 'CASCADE',
     });
 
@@ -44,6 +46,15 @@ Feedback.init(
     questions: {
       type: DataTypes.JSON,
       defaultValue: [],
+      allowNull: true,
+    },
+    reminder: {
+      type: DataTypes.DATEONLY,
+      allowNull: false,
+    },
+    repeat: {
+      type: DataTypes.NUMBER,
+      allowNull: false,
     },
     createdAt: DataTypes.DATE,
     updatedAt: DataTypes.DATE,

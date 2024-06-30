@@ -77,9 +77,9 @@ class Employee extends Model {
       onDelete: 'SET NULL',
     });
     this.hasMany(models.Announcement);
-    this.hasMany(models.Assessment);
+    // this.hasMany(models.Assessment);
     this.hasMany(models.Attendance);
-    this.hasMany(models.Feedback);
+    // this.hasMany(models.Feedback);
     this.hasMany(models.Goal, {
       foreignKey: 'assignedTo',
       onDelete: 'SET NULL',

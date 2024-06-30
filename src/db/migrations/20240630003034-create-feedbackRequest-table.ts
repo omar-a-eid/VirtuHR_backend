@@ -2,7 +2,7 @@ import { DataTypes, QueryInterface } from 'sequelize';
 
 export default {
   up: async (queryInterface: QueryInterface) => {
-    await queryInterface.createTable('assessments', {
+    await queryInterface.createTable('feedback_requests', {
       id: {
         type: DataTypes.INTEGER,
         autoIncrement: true,
@@ -17,35 +17,33 @@ export default {
         allowNull: false,
         onDelete: 'CASCADE',
       },
-      manager_questions: {
-        type: DataTypes.JSON,
-        allowNull: false,
-      },
-      self_questions: {
-        type: DataTypes.JSON,
-        allowNull: false,
-      },
-      start_date: {
-        type: DataTypes.DATEONLY,
-        allowNull: false,
-      },
-      repeat: {
+      from_employee_id: {
         type: DataTypes.INTEGER,
+        references: {
+          model: 'employees',
+          key: 'id',
+        },
         allowNull: false,
+        onDelete: 'CASCADE',
       },
-      created_at: {
-        type: DataTypes.DATE,
+      to_employee_id: {
+        type: DataTypes.INTEGER,
+        references: {
+          model: 'employees',
+          key: 'id',
+        },
         allowNull: false,
-        defaultValue: DataTypes.NOW,
+        onDelete: 'CASCADE',
       },
-      updated_at: {
-        type: DataTypes.DATE,
-        allowNull: false,
-        defaultValue: DataTypes.NOW,
+      status: {
+        type: DataTypes.ENUM('pending', 'completed'),
+        defaultValue: 'pending',
       },
+      created_at: DataTypes.DATE,
+      updated_at: DataTypes.DATE,
     });
   },
   down: async (queryInterface: QueryInterface) => {
-    await queryInterface.dropTable('assessments');
+    await queryInterface.dropTable('feedback_requests');
   },
 };

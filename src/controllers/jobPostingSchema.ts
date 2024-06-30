@@ -16,7 +16,7 @@ const jobPostingSchema = Joi.object({
   hiringLeadId: Joi.allow(null).messages({
     'string.base': 'Hiring lead must be a string',
   }),
-  department: Joi.allow(null).messages({
+  departmentId: Joi.allow(null).messages({
     'string.base': 'Department ID must be a string',
   }),
   employmentType: Joi.string()

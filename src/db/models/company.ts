@@ -21,6 +21,12 @@ class Company extends Model {
       as: 'company',
       onDelete: 'SET NULL',
     });
+
+    this.hasMany(models.Cycle, {
+      foreignKey: 'companyId',
+      as: 'cycles',
+      onDelete: 'SET NULL',
+    });
   }
 }
 

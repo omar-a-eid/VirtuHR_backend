@@ -1,88 +1,80 @@
 import { DataTypes, Model } from 'sequelize';
 import sequelize from '../../config/database';
 
-class AssessmentAnswer extends Model {
+class FeedbackRequest extends Model {
   declare id: number;
-  declare assessmentId: number;
-  declare answers: JSON;
-  declare employeeId: number;
-  declare recipientId: number;
+  declare cycleId: number;
+  declare fromEmployeeId: number;
+  declare toEmployeeId: number;
+  declare status: 'pending' | 'completed';
   declare createdAt: Date;
   declare updatedAt: Date;
 
   static associate(models: any) {
-    this.belongsTo(models.Assessment, {
-      foreignKey: 'assessmentId',
+    this.belongsTo(models.Cycle, {
+      foreignKey: 'cycleId',
       onDelete: 'CASCADE',
     });
     this.belongsTo(models.Employee, {
-      as: 'employee',
-      foreignKey: 'employeeId',
+      foreignKey: 'fromEmployeeId',
+      as: 'fromEmployee',
       onDelete: 'CASCADE',
     });
     this.belongsTo(models.Employee, {
-      as: 'recipient',
-      foreignKey: 'recipientId',
+      foreignKey: 'toEmployeeId',
+      as: 'toEmployee',
       onDelete: 'CASCADE',
     });
   }
 }
 
-AssessmentAnswer.init(
+FeedbackRequest.init(
   {
     id: {
       type: DataTypes.INTEGER,
       autoIncrement: true,
       primaryKey: true,
     },
-    assessmentId: {
+    cycleId: {
       type: DataTypes.INTEGER,
+      allowNull: false,
       references: {
-        model: 'assessments',
+        model: 'cycles',
         key: 'id',
       },
-      allowNull: false,
       onDelete: 'CASCADE',
     },
-    answers: {
-      type: DataTypes.JSON,
-      allowNull: false,
-    },
-    employeeId: {
+    fromEmployeeId: {
       type: DataTypes.INTEGER,
+      allowNull: false,
       references: {
         model: 'employees',
         key: 'id',
       },
-      allowNull: false,
       onDelete: 'CASCADE',
     },
-    recipientId: {
+    toEmployeeId: {
       type: DataTypes.INTEGER,
+      allowNull: false,
       references: {
         model: 'employees',
         key: 'id',
       },
-      allowNull: false,
       onDelete: 'CASCADE',
     },
-    createdAt: {
-      type: DataTypes.DATE,
-      allowNull: false,
-      defaultValue: DataTypes.NOW,
+    status: {
+      type: DataTypes.ENUM('pending', 'completed'),
+      defaultValue: 'pending',
     },
-    updatedAt: {
-      type: DataTypes.DATE,
-      allowNull: false,
-      defaultValue: DataTypes.NOW,
-    },
+    createdAt: DataTypes.DATE,
+    updatedAt: DataTypes.DATE,
   },
   {
     sequelize,
-    modelName: 'AssessmentAnswer',
+    modelName: 'FeedbackRequest',
     timestamps: true,
     underscored: true,
   },
 );
 
-export default AssessmentAnswer;
+export default FeedbackRequest;

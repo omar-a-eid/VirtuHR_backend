@@ -15,6 +15,7 @@ export default {
           model: 'cycles',
           key: 'id',
         },
+        onDelete: 'CASCADE',
       },
       feedback_type: {
         type: DataTypes.ENUM('upward', 'peer'),
@@ -26,13 +27,29 @@ export default {
       questions: {
         type: DataTypes.JSON,
         defaultValue: [],
+        allowNull: true,
       },
-      created_at: DataTypes.DATE,
-      updated_at: DataTypes.DATE,
+      reminder: {
+        type: DataTypes.DATEONLY,
+        allowNull: false,
+      },
+      repeat: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+      },
+      created_at: {
+        type: DataTypes.DATE,
+        allowNull: false,
+        defaultValue: DataTypes.NOW,
+      },
+      updated_at: {
+        type: DataTypes.DATE,
+        allowNull: false,
+        defaultValue: DataTypes.NOW,
+      },
     });
   },
   down: async (queryInterface: QueryInterface) => {
-    // Define how to revert the changes made in the `up` method
     await queryInterface.dropTable('feedbacks');
   },
 };
